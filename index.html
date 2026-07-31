@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Team — Closing Event</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cardinal:#B91E2B;
+    --cardinal-deep:#7F141D;
+    --ink:#1A1712;
+    --slate:#2B2823;
+    --stone:#F4EEE3;
+    --parchment:#FBF7EF;
+    --brass:#C9A24B;
+    --brass-soft:#E4CC8B;
+    --mercury:#E7E1D4;
+    --ok:#3F6B4A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 800px at 15% -10%, rgba(185,30,43,0.10), transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, rgba(201,162,75,0.14), transparent 55%),
+      var(--stone);
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 18px;
+    overflow-x:hidden;
+  }
+  .stage{
+    width:100%;
+    max-width:620px;
+    position:relative;
+  }
+
+  /* Texture strip top */
+  .brandbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:28px;
+    color:var(--cardinal-deep);
+    letter-spacing:.16em;
+    font-size:11.5px;
+    font-weight:600;
+    text-transform:uppercase;
+  }
+  .brandbar::before, .brandbar::after{
+    content:"";
+    height:1px;
+    width:38px;
+    background:linear-gradient(90deg, transparent, var(--brass), transparent);
+  }
+
+  /* ---------- Seal / Crest ---------- */
+  .seal-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:6px;
+  }
+  .seal{
+    width:108px;
+    height:108px;
+    transition:transform .6s cubic-bezier(.22,1,.36,1);
+  }
+  .seal.cracked{
+    animation:crackShake .5s ease;
+  }
+  @keyframes crackShake{
+    0%{transform:rotate(0deg) scale(1);}
+    30%{transform:rotate(-3deg) scale(1.03);}
+    60%{transform:rotate(2deg) scale(1.05);}
+    100%{transform:rotate(0deg) scale(1);}
+  }
+
+  /* ---------- Card shell ---------- */
+  .card{
+    background:var(--parchment);
+    border-radius:22px;
+    padding:44px 40px 40px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 30px 60px -20px rgba(26,23,18,0.35),
+      0 2px 0 var(--brass);
+    border:1px solid rgba(201,162,75,0.35);
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(185,30,43,0.05), transparent 22%);
+    pointer-events:none;
+  }
+
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(28px,5vw,36px);
+    text-align:center;
+    margin:2px 0 6px;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  p.sub{
+    text-align:center;
+    margin:0 0 30px;
+    color:#5b5648;
+    font-size:15px;
+    line-height:1.5;
+  }
+
+  /* ---------- Autocomplete ---------- */
+  .field{
+    position:relative;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--cardinal-deep);
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  input#nameInput{
+    width:100%;
+    font-family:'Work Sans', sans-serif;
+    font-size:18px;
+    padding:16px 18px;
+    border-radius:12px;
+    border:2px solid var(--mercury);
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  input#nameInput:focus{
+    border-color:var(--cardinal);
+    box-shadow:0 0 0 4px rgba(185,30,43,0.12);
+  }
+  .suggestions{
+    position:absolute;
+    top:calc(100% + 8px);
+    left:0; right:0;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 20px 40px -12px rgba(26,23,18,0.28);
+    border:1px solid var(--mercury);
+    max-height:260px;
+    overflow-y:auto;
+    z-index:20;
+    display:none;
+  }
+  .suggestions.open{display:block;}
+  .suggestion{
+    padding:13px 18px;
+    font-size:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #f1ece1;
+  }
+  .suggestion:last-child{border-bottom:none;}
+  .suggestion:hover, .suggestion.active{
+    background:var(--stone);
+  }
+  .suggestion .grp-chip{
+    font-size:11px;
+    font-weight:700;
+    color:var(--cardinal-deep);
+    background:rgba(185,30,43,0.08);
+    border-radius:20px;
+    padding:3px 9px;
+    letter-spacing:.03em;
+  }
+  .no-match{
+    padding:16px 18px;
+    font-size:14.5px;
+    color:#8a8474;
+  }
+
+  .helper{
+    margin-top:14px;
+    font-size:13px;
+    color:#8a8474;
+    text-align:center;
+  }
+
+  /* ---------- Reveal panel ---------- */
+  .reveal{
+    display:none;
+    text-align:center;
+  }
+  .reveal.show{display:block;}
+  .lookup.hide{display:none;}
+
+  .greeting{
+    font-size:14.5px;
+    color:#8a8474;
+    margin-bottom:2px;
+  }
+  .greeting b{color:var(--ink);}
+
+  .team-name{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(38px,8vw,54px);
+    color:var(--cardinal);
+    margin:6px 0 4px;
+    opacity:0;
+    transform:translateY(14px);
+  }
+  .team-name.animate-in{
+    animation:riseFade .7s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .team-rule{
+    width:64px;height:3px;margin:14px auto 26px;
+    background:linear-gradient(90deg, var(--brass), var(--cardinal));
+    border-radius:3px;
+    transform:scaleX(0);
+    transform-origin:center;
+  }
+  .team-rule.animate-in{
+    animation:growLine .5s ease .35s forwards;
+  }
+  @keyframes growLine{ to{ transform:scaleX(1);} }
+  @keyframes riseFade{ to{ opacity:1; transform:translateY(0);} }
+
+  .roster-label{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--cardinal-deep);
+    font-weight:700;
+    margin-bottom:14px;
+  }
+
+  .roster{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+    text-align:left;
+  }
+  @media (max-width:480px){
+    .roster{grid-template-columns:1fr;}
+  }
+  .member{
+    background:#fff;
+    border:1px solid var(--mercury);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:15px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    opacity:0;
+    transform:translateY(10px);
+  }
+  .member.animate-in{
+    animation:memberIn .45s ease forwards;
+  }
+  .member.you{
+    border-color:var(--cardinal);
+    background:rgba(185,30,43,0.05);
+  }
+  .member .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--brass);
+    flex-shrink:0;
+  }
+  .member.you .dot{background:var(--cardinal);}
+  @keyframes memberIn{ to{opacity:1; transform:translateY(0);} }
+
+  .again{
+    margin-top:32px;
+    background:none;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:13.5px;
+    font-weight:600;
+    letter-spacing:.04em;
+    padding:11px 22px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  .again:hover{
+    background:var(--ink);
+    color:var(--parchment);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:22px;
+    font-size:12px;
+    color:#a39d8c;
+    letter-spacing:.03em;
+  }
+
+  /* confetti */
+  .confetti-piece{
+    position:fixed;
+    top:-20px;
+    width:8px;height:14px;
+    opacity:0.9;
+    pointer-events:none;
+    z-index:50;
+  }
+  @keyframes fall{
+    to{ transform:translateY(105vh) rotate(540deg); opacity:0.2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="brandbar">ING College of Innovation and Leadership · Closing Event</div>
+
+  <div class="seal-wrap">
+    <svg class="seal" id="sealSvg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="56" fill="#7F141D"/>
+      <circle cx="60" cy="60" r="56" fill="none" stroke="#C9A24B" stroke-width="2.5"/>
+      <circle cx="60" cy="60" r="47" fill="none" stroke="#C9A24B" stroke-width="1" stroke-dasharray="2 4"/>
+      <path d="M60 26 L68 46 L90 46 L72 59 L79 80 L60 67 L41 80 L48 59 L30 46 L52 46 Z" fill="#E4CC8B"/>
+      <text x="60" y="103" text-anchor="middle" fill="#E4CC8B" font-family="Georgia, serif" font-size="9" letter-spacing="2">EST. 1884</text>
+    </svg>
+  </div>
+
+  <div class="card">
+
+    <!-- LOOKUP VIEW -->
+    <div class="lookup" id="lookupView">
+      <h1 class="title">Find Your Team</h1>
+      <p class="sub">Let's find your crew for the day.<br>Type your name to reveal your team.</p>
+
+      <div class="field">
+        <label for="nameInput">Your name</label>
+        <input id="nameInput" type="text" autocomplete="off" placeholder="Start typing your name…" />
+        <div class="suggestions" id="suggestions"></div>
+      </div>
+      <p class="helper">Can't find your name? Check with your program coordinator at the registration desk.</p>
+    </div>
+
+    <!-- REVEAL VIEW -->
+    <div class="reveal" id="revealView">
+      <div class="greeting">Welcome, <b id="revealNameLabel"></b></div>
+      <div class="roster-label" id="youAreIn">You are in</div>
+      <div class="team-name" id="teamNameLabel"></div>
+      <div class="team-rule" id="teamRule"></div>
+      <div class="roster-label">Your teammates</div>
+      <div class="roster" id="rosterGrid"></div>
+      <button class="again" id="againBtn">Search another name</button>
+    </div>
+
+  </div>
+
+  <footer>ING College of Innovation and Leadership · Programme Closing Event</footer>
+</div>
+
+<script>
+// ---------- DATA ----------
+const GROUPS = {
+  "1": ["Aarambha Neupane","Aayush Karki","Akshath Basnet","Angel Maharjan","Bidhan Mishra","Bigyata Shrestha","Bishal Khadka","Garima Shrestha","Gunila Napit","Kabim Dhungel"],
+  "2": ["Kohinoor Tiwari","Kriti Shakya","Lisha Bogati","Meghmala Shrestha","Prajita Mudbhari","Preram Kutu","Priyanshu Khadka","Ritisha Aryal","Riwaaz Budhathoki","Roshan Subedi"],
+  "3": ["Roshish Manandhar","Sarthak Shrestha","Saurya Pradhan","Shivwam Shrestha","Swornim Dahal","Tanusha Lohani","Angel Shrestha","Bishma Maharjan","Harshika Shrestha","Palaska Shingh"],
+  "4": ["Riwaz Amatya","Prabesh Acharya","Sulav Subedi","Aayush Tamrakar","Anup Dharel","Ayush Bajracharya","Dip KC","Rozyan Nemkhu","Samira Shrestha","Samragi Karki"],
+  "5": ["Aryan Basnet","Pranish Rajkarnikar","Sneha Pant","Luniva Shrestha","Nischal Dhakal","Sarbani Joshi","Najnin Praween","Aarjav Lal Shrestha","Abhaya Shrestha","Suraksha Neupane"],
+  "6": ["Tulsi Ram Shrestha","Bikash Maharjan","Pujan Panta","Roshan Kumar Sharma","Sujata Nakarmi","Rikesh Rimal","Sarvesh Karki","Shreeya Shrestha","Shubhankar Chudal","Suyash Babu Pandey"],
+  "7": ["Amshu Shivabhakti","Anisha Shrestha","Anubhav Bajracharya","Archit Sah","Dennis Thapa","Madan Bahadur Majhi","Shambhav Ratna Shakya","Zara Shahi","Roshan Maharjan","Yasu Shakya"],
+  "8": ["Prashant Ghimire","Aditi Rimal","Dipin Karki","Prasanna Koirala","Samriddha Shrestha","Siddhant Shrestha","Utsav Bogati","Himesh Awasthi","Pranish Dhakal","Sworit Suwal"],
+  "9": ["Sudarshan Shrestha","Rohan Shrestha","Bibek Jyu Thakuri","Sayam Shrestha","Adrisha Shakya","Reebha Tuladhar","Samip Bhattarai","Saugat Kamal Upreti","Prabesh Pandit","Bidhan Amatya"],
+  "10": ["Shishir Gupta","Aarab Byanjankar","Aarabi Byanjankar","Bishesh Shakya","Dilasha Khadgi","Nabin Dong","Nischaya Tamrakar","Sharbin Shrestha","Subash Kumar Gain","Aashraya Shakya","Bigyan Shrestha","Subarna Shrestha"],
+  "11": ["Yajju Ratna Bajracharya","Aashrika Rimal","Aditya Kumar Mandal","Anjila Shah","Aron Thapa","Arya Man Singh Katuwal","Aryan Jung Basnet","Ashutosh Basnet","Dev Raj Yogi","Jay Prakash Sah","Kushal Dahal","Purshottam Shrestha"],
+  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"]
+};
+
+// Build a flat searchable index: { name, group }
+const INDEX = [];
+Object.keys(GROUPS).forEach(g => {
+  GROUPS[g].forEach(name => INDEX.push({ name, group: g }));
+});
+
+// ---------- DOM ----------
+const input = document.getElementById('nameInput');
+const suggestionsBox = document.getElementById('suggestions');
+const lookupView = document.getElementById('lookupView');
+const revealView = document.getElementById('revealView');
+const sealSvg = document.getElementById('sealSvg');
+const again = document.getElementById('againBtn');
+
+let activeIndex = -1;
+let currentMatches = [];
+
+function normalize(s){
+  return s.toLowerCase().replace(/\s+/g,' ').trim();
+}
+
+function renderSuggestions(query){
+  const q = normalize(query);
+  if(!q){
+    suggestionsBox.classList.remove('open');
+    suggestionsBox.innerHTML = '';
+    currentMatches = [];
+    return;
+  }
+  currentMatches = INDEX.filter(item => normalize(item.name).includes(q)).slice(0, 8);
+  activeIndex = -1;
+
+  if(currentMatches.length === 0){
+    suggestionsBox.innerHTML = '<div class="no-match">No matching name yet — keep typing, or check spelling.</div>';
+    suggestionsBox.classList.add('open');
+    return;
+  }
+
+  suggestionsBox.innerHTML = currentMatches.map((item, i) =>
+    `<div class="suggestion" data-idx="${i}">
+       <span>${item.name}</span>
+     </div>`
+  ).join('');
+  suggestionsBox.classList.add('open');
+
+  Array.from(suggestionsBox.querySelectorAll('.suggestion')).forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.getAttribute('data-idx'), 10);
+      selectStudent(currentMatches[idx]);
+    });
+  });
+}
+
+input.addEventListener('input', (e) => renderSuggestions(e.target.value));
+
+input.addEventListener('keydown', (e) => {
+  const items = Array.from(suggestionsBox.querySelectorAll('.suggestion'));
+  if(!items.length) return;
+  if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    activeIndex = Math.min(activeIndex + 1, items.length - 1);
+    updateActive(items);
+  } else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    activeIndex = Math.max(activeIndex - 1, 0);
+    updateActive(items);
+  } else if(e.key === 'Enter'){
+    e.preventDefault();
+    if(activeIndex >= 0 && currentMatches[activeIndex]){
+      selectStudent(currentMatches[activeIndex]);
+    } else if(currentMatches.length === 1){
+      selectStudent(currentMatches[0]);
+    }
+  }
+});
+
+function updateActive(items){
+  items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
+}
+
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.field')){
+    suggestionsBox.classList.remove('open');
+  }
+});
+
+function selectStudent(item){
+  suggestionsBox.classList.remove('open');
+  input.value = item.name;
+  sealSvg.classList.add('cracked');
+  setTimeout(() => showReveal(item), 280);
+}
+
+function showReveal(item){
+  lookupView.classList.add('hide');
+  revealView.classList.add('show');
+
+  document.getElementById('revealNameLabel').textContent = item.name.split(' ')[0];
+  document.getElementById('teamNameLabel').textContent = `Group ${item.group}`;
+
+  const teamNameEl = document.getElementById('teamNameLabel');
+  const ruleEl = document.getElementById('teamRule');
+  teamNameEl.classList.remove('animate-in'); void teamNameEl.offsetWidth; teamNameEl.classList.add('animate-in');
+  ruleEl.classList.remove('animate-in'); void ruleEl.offsetWidth; ruleEl.classList.add('animate-in');
+
+  const roster = document.getElementById('rosterGrid');
+  const members = GROUPS[item.group];
+  roster.innerHTML = members.map((name, i) => {
+    const isYou = name === item.name;
+    return `<div class="member ${isYou ? 'you' : ''}" style="animation-delay:${0.15 + i*0.06}s">
+              <span class="dot"></span><span>${name}${isYou ? ' (you)' : ''}</span>
+            </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    roster.querySelectorAll('.member').forEach(el => el.classList.add('animate-in'));
+  });
+
+  launchConfetti();
+}
+
+again.addEventListener('click', () => {
+  revealView.classList.remove('show');
+  lookupView.classList.remove('hide');
+  input.value = '';
+  input.focus();
+  sealSvg.classList.remove('cracked');
+});
+
+// ---------- lightweight confetti ----------
+function launchConfetti(){
+  const colors = ['#B91E2B', '#C9A24B', '#E4CC8B', '#7F141D'];
+  const count = 26;
+  for(let i=0; i<count; i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random()*100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animation = `fall ${2.2 + Math.random()*1.4}s ease-in forwards`;
+    piece.style.animationDelay = (Math.random()*0.4) + 's';
+    piece.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
+}
+</script>
+</body>
+</html>
