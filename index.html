@@ -330,7 +330,7 @@
 <body>
 
 <div class="stage">
-  <div class="brandbar">ING College of Innovation and Leadership · Closing Event</div>
+  <div class="brandbar">Bangor University · Closing Event</div>
 
   <div class="seal-wrap">
     <svg class="seal" id="sealSvg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -347,7 +347,7 @@
     <!-- LOOKUP VIEW -->
     <div class="lookup" id="lookupView">
       <h1 class="title">Find Your Team</h1>
-      <p class="sub">Let's find your crew for the day.<br>Type your name to reveal your team.</p>
+      <p class="sub">Scan complete — now let's find your crew for the day.<br>Type your name to reveal your team.</p>
 
       <div class="field">
         <label for="nameInput">Your name</label>
@@ -355,6 +355,7 @@
         <div class="suggestions" id="suggestions"></div>
       </div>
       <p class="helper">Can't find your name? Check with your program coordinator at the registration desk.</p>
+      <p class="helper" id="dataStatus" style="margin-top:4px;">Loading roster…</p>
     </div>
 
     <!-- REVEAL VIEW -->
@@ -374,8 +375,12 @@
 </div>
 
 <script>
-// ---------- DATA ----------
-const GROUPS = {
+// ---------- LIVE DATA SOURCE ----------
+// Published Google Sheet (CSV). Update this link any time you republish.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRz1tawR9h-vUU0EsatIM0iWeEb9lILB-DiPdHmm0jCxQVIKcUx8Z1GHTb1xJrTw2Bk8nJF9Bfpk_Kv/pub?gid=0&single=true&output=csv";
+
+// ---------- BACKUP DATA (used only if the live sheet can't be reached) ----------
+const BACKUP_GROUPS = {
   "1": ["Aarambha Neupane","Aayush Karki","Akshath Basnet","Angel Maharjan","Bidhan Mishra","Bigyata Shrestha","Bishal Khadka","Garima Shrestha","Gunila Napit","Kabim Dhungel"],
   "2": ["Kohinoor Tiwari","Kriti Shakya","Lisha Bogati","Meghmala Shrestha","Prajita Mudbhari","Preram Kutu","Priyanshu Khadka","Ritisha Aryal","Riwaaz Budhathoki","Roshan Subedi"],
   "3": ["Roshish Manandhar","Sarthak Shrestha","Saurya Pradhan","Shivwam Shrestha","Swornim Dahal","Tanusha Lohani","Angel Shrestha","Bishma Maharjan","Harshika Shrestha","Palaska Shingh"],
@@ -387,14 +392,85 @@ const GROUPS = {
   "9": ["Sudarshan Shrestha","Rohan Shrestha","Bibek Jyu Thakuri","Sayam Shrestha","Adrisha Shakya","Reebha Tuladhar","Samip Bhattarai","Saugat Kamal Upreti","Prabesh Pandit","Bidhan Amatya"],
   "10": ["Shishir Gupta","Aarab Byanjankar","Aarabi Byanjankar","Bishesh Shakya","Dilasha Khadgi","Nabin Dong","Nischaya Tamrakar","Sharbin Shrestha","Subash Kumar Gain","Aashraya Shakya","Bigyan Shrestha","Subarna Shrestha"],
   "11": ["Yajju Ratna Bajracharya","Aashrika Rimal","Aditya Kumar Mandal","Anjila Shah","Aron Thapa","Arya Man Singh Katuwal","Aryan Jung Basnet","Ashutosh Basnet","Dev Raj Yogi","Jay Prakash Sah","Kushal Dahal","Purshottam Shrestha"],
-  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"]
+  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"],
+  "13": ["umesh nepal"]
 };
 
-// Build a flat searchable index: { name, group }
-const INDEX = [];
-Object.keys(GROUPS).forEach(g => {
-  GROUPS[g].forEach(name => INDEX.push({ name, group: g }));
-});
+let GROUPS = BACKUP_GROUPS;
+let INDEX = [];
+
+function buildIndex(){
+  INDEX = [];
+  Object.keys(GROUPS).forEach(g => {
+    GROUPS[g].forEach(name => INDEX.push({ name, group: g }));
+  });
+}
+buildIndex();
+
+// ---------- CSV parsing (handles quoted fields/commas) ----------
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for(let i=0; i<text.length; i++){
+    const c = text[i], next = text[i+1];
+    if(inQuotes){
+      if(c === '"' && next === '"'){ field += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else { field += c; }
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === ','){ row.push(field); field = ''; }
+      else if(c === '\n' || c === '\r'){
+        if(c === '\r' && next === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else { field += c; }
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.length && r.some(v => v.trim() !== ''));
+}
+
+function groupsFromRows(rows){
+  if(!rows.length) return null;
+  const header = rows[0].map(h => h.trim().toLowerCase());
+  const groupIdx = header.findIndex(h => h.includes('group'));
+  const nameIdx = header.findIndex(h => h.includes('name'));
+  if(groupIdx === -1 || nameIdx === -1) return null;
+
+  const out = {};
+  for(let i=1; i<rows.length; i++){
+    const r = rows[i];
+    const g = (r[groupIdx] || '').toString().trim();
+    const name = (r[nameIdx] || '').toString().replace(/\s+/g, ' ').trim();
+    if(!g || !name) continue;
+    if(!out[g]) out[g] = [];
+    out[g].push(name);
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+function loadLiveData(){
+  const statusEl = document.getElementById('dataStatus');
+  fetch(SHEET_CSV_URL, { cache: 'no-store' })
+    .then(res => { if(!res.ok) throw new Error('Bad response'); return res.text(); })
+    .then(text => {
+      const rows = parseCSV(text);
+      const live = groupsFromRows(rows);
+      if(live){
+        GROUPS = live;
+        buildIndex();
+        if(statusEl) statusEl.textContent = 'Live roster loaded';
+      } else {
+        throw new Error('Could not parse sheet');
+      }
+    })
+    .catch(() => {
+      GROUPS = BACKUP_GROUPS;
+      buildIndex();
+      if(statusEl) statusEl.textContent = 'Showing saved roster (offline)';
+    });
+}
+loadLiveData();
 
 // ---------- DOM ----------
 const input = document.getElementById('nameInput');
