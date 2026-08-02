@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week Itinerary — Semester Zero Innovation Sprint</title>
+<title>Find Your Team — Closing Event</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
     --cardinal:#B91E2B;
     --cardinal-deep:#7F141D;
     --ink:#1A1712;
+    --slate:#2B2823;
     --stone:#F4EEE3;
     --parchment:#FBF7EF;
     --brass:#C9A24B;
@@ -30,21 +31,24 @@
     font-family:'Work Sans', sans-serif;
     color:var(--ink);
     display:flex;
-    align-items:flex-start;
+    align-items:center;
     justify-content:center;
-    padding:36px 16px 60px;
+    padding:32px 18px;
+    overflow-x:hidden;
   }
   .stage{
     width:100%;
-    max-width:760px;
+    max-width:620px;
+    position:relative;
   }
 
+  /* Texture strip top */
   .brandbar{
     display:flex;
     align-items:center;
     justify-content:center;
     gap:10px;
-    margin-bottom:22px;
+    margin-bottom:28px;
     color:var(--cardinal-deep);
     letter-spacing:.16em;
     font-size:11.5px;
@@ -58,493 +62,593 @@
     background:linear-gradient(90deg, transparent, var(--brass), transparent);
   }
 
-  .hero{
-    text-align:center;
-    margin-bottom:26px;
-  }
-  .hero .kicker{
-    font-size:12px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:var(--brass-soft);
-    background:var(--ink);
-    display:inline-block;
-    padding:6px 14px;
-    border-radius:20px;
-    font-weight:700;
-    margin-bottom:14px;
-  }
-  .hero h1{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:clamp(30px,6vw,44px);
-    margin:0 0 8px;
-    letter-spacing:-0.01em;
-  }
-  .hero p{
-    margin:0;
-    color:#5b5648;
-    font-size:15px;
-    line-height:1.55;
-    max-width:480px;
-    margin:0 auto;
-  }
-
-  /* ---- week progress dots ---- */
-  .weekbar{
+  /* ---------- Seal / Crest ---------- */
+  .seal-wrap{
     display:flex;
     justify-content:center;
-    gap:10px;
-    margin:26px 0 20px;
+    margin-bottom:6px;
   }
-  .weekdot{
-    width:10px;height:10px;border-radius:50%;
-    background:var(--mercury);
-    transition:all .3s ease;
-    cursor:pointer;
+  .seal{
+    width:108px;
+    height:108px;
+    transition:transform .6s cubic-bezier(.22,1,.36,1);
   }
-  .weekdot.active{
-    background:var(--cardinal);
-    transform:scale(1.35);
+  .seal.cracked{
+    animation:crackShake .5s ease;
   }
-  .weekdot.passed{
-    background:var(--brass);
+  @keyframes crackShake{
+    0%{transform:rotate(0deg) scale(1);}
+    30%{transform:rotate(-3deg) scale(1.03);}
+    60%{transform:rotate(2deg) scale(1.05);}
+    100%{transform:rotate(0deg) scale(1);}
   }
 
-  /* ---- tabs ---- */
-  .tabs{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding-bottom:6px;
-    margin-bottom:22px;
-    scrollbar-width:none;
-  }
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab{
-    flex:0 0 auto;
-    background:#fff;
-    border:1.5px solid var(--mercury);
-    border-radius:14px;
-    padding:10px 16px;
-    cursor:pointer;
-    text-align:left;
-    transition:all .2s ease;
-    min-width:104px;
-  }
-  .tab .tnum{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-style:italic;
-    font-size:20px;
-    color:var(--cardinal-deep);
-    line-height:1;
-  }
-  .tab .tlabel{
-    font-size:11px;
-    color:#8a8474;
-    font-weight:600;
-    letter-spacing:.02em;
-    margin-top:3px;
-  }
-  .tab:hover{border-color:var(--brass);}
-  .tab.active{
-    background:var(--ink);
-    border-color:var(--ink);
-  }
-  .tab.active .tnum{color:var(--brass-soft);}
-  .tab.active .tlabel{color:#d8d2c2;}
-
-  /* ---- day card ---- */
+  /* ---------- Card shell ---------- */
   .card{
     background:var(--parchment);
     border-radius:22px;
-    padding:36px 34px 32px;
+    padding:44px 40px 40px;
     box-shadow:
       0 1px 0 rgba(255,255,255,0.6) inset,
-      0 30px 60px -20px rgba(26,23,18,0.30),
+      0 30px 60px -20px rgba(26,23,18,0.35),
       0 2px 0 var(--brass);
     border:1px solid rgba(201,162,75,0.35);
     position:relative;
     overflow:hidden;
   }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(185,30,43,0.05), transparent 22%);
+    pointer-events:none;
+  }
 
-  .day-head{
-    margin-bottom:6px;
-  }
-  .day-eyebrow{
-    font-size:11.5px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--cardinal-deep);
-    font-weight:700;
-  }
-  .day-title{
+  h1.title{
     font-family:'Fraunces', serif;
     font-weight:600;
-    font-size:clamp(24px,5vw,32px);
-    margin:4px 0 6px;
+    font-size:clamp(28px,5vw,36px);
+    text-align:center;
+    margin:2px 0 6px;
     color:var(--ink);
+    letter-spacing:-0.01em;
   }
-  .day-theme{
-    font-size:14.5px;
-    font-style:italic;
-    color:#6b6555;
-    margin-bottom:22px;
+  p.sub{
+    text-align:center;
+    margin:0 0 30px;
+    color:#5b5648;
+    font-size:15px;
+    line-height:1.5;
   }
 
-  /* ---- timeline ---- */
-  .timeline{
+  /* ---------- Autocomplete ---------- */
+  .field{
     position:relative;
-    padding-left:26px;
-    border-left:2px dashed var(--mercury);
-    margin-left:6px;
   }
-  .titem{
-    position:relative;
-    padding-bottom:24px;
-    opacity:0;
-    transform:translateX(-10px);
+  .field label{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--cardinal-deep);
+    font-weight:600;
+    margin-bottom:8px;
   }
-  .titem.animate-in{
-    animation:slideIn .5s cubic-bezier(.22,1,.36,1) forwards;
+  input#nameInput{
+    width:100%;
+    font-family:'Work Sans', sans-serif;
+    font-size:18px;
+    padding:16px 18px;
+    border-radius:12px;
+    border:2px solid var(--mercury);
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
   }
-  .titem:last-child{padding-bottom:4px;}
-  @keyframes slideIn{ to{opacity:1; transform:translateX(0);} }
-
-  .titem::before{
-    content:"";
+  input#nameInput:focus{
+    border-color:var(--cardinal);
+    box-shadow:0 0 0 4px rgba(185,30,43,0.12);
+  }
+  .suggestions{
     position:absolute;
-    left:-31.5px;
-    top:4px;
-    width:11px;height:11px;
-    border-radius:50%;
-    background:var(--cardinal);
-    border:3px solid var(--parchment);
-    box-shadow:0 0 0 2px var(--brass);
+    top:calc(100% + 8px);
+    left:0; right:0;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 20px 40px -12px rgba(26,23,18,0.28);
+    border:1px solid var(--mercury);
+    max-height:260px;
+    overflow-y:auto;
+    z-index:20;
+    display:none;
   }
-
-  .titem-head{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .titem-focus{
-    font-weight:700;
+  .suggestions.open{display:block;}
+  .suggestion{
+    padding:13px 18px;
     font-size:16px;
-    color:var(--ink);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #f1ece1;
   }
-  .titem-duration{
-    font-size:11.5px;
+  .suggestion:last-child{border-bottom:none;}
+  .suggestion:hover, .suggestion.active{
+    background:var(--stone);
+  }
+  .suggestion .grp-chip{
+    font-size:11px;
     font-weight:700;
     color:var(--cardinal-deep);
     background:rgba(185,30,43,0.08);
     border-radius:20px;
-    padding:3px 11px;
-    white-space:nowrap;
+    padding:3px 9px;
+    letter-spacing:.03em;
   }
-  .titem-desc{
+  .no-match{
+    padding:16px 18px;
     font-size:14.5px;
-    line-height:1.55;
-    color:#5b5648;
-    margin-top:5px;
+    color:#8a8474;
   }
 
-  /* ---- footer summary ---- */
-  .day-summary{
-    margin-top:26px;
-    display:flex;
-    gap:12px;
-    align-items:center;
-    flex-wrap:wrap;
+  .helper{
+    margin-top:14px;
+    font-size:13px;
+    color:#8a8474;
+    text-align:center;
   }
-  .total-chip{
-    background:var(--ink);
-    color:var(--brass-soft);
-    font-size:12.5px;
-    font-weight:700;
-    padding:8px 15px;
-    border-radius:30px;
+
+  /* ---------- Reveal panel ---------- */
+  .reveal{
+    display:none;
+    text-align:center;
+  }
+  .reveal.show{display:block;}
+  .lookup.hide{display:none;}
+
+  .greeting{
+    font-size:14.5px;
+    color:#8a8474;
+    margin-bottom:2px;
+  }
+  .greeting b{color:var(--ink);}
+
+  .team-name{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(38px,8vw,54px);
+    color:var(--cardinal);
+    margin:6px 0 4px;
+    opacity:0;
+    transform:translateY(14px);
+  }
+  .team-name.animate-in{
+    animation:riseFade .7s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .team-rule{
+    width:64px;height:3px;margin:14px auto 26px;
+    background:linear-gradient(90deg, var(--brass), var(--cardinal));
+    border-radius:3px;
+    transform:scaleX(0);
+    transform-origin:center;
+  }
+  .team-rule.animate-in{
+    animation:growLine .5s ease .35s forwards;
+  }
+  @keyframes growLine{ to{ transform:scaleX(1);} }
+  @keyframes riseFade{ to{ opacity:1; transform:translateY(0);} }
+
+  .location-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(201,162,75,0.14);
+    border:1px solid var(--brass);
+    color:var(--cardinal-deep);
+    font-size:14px;
+    font-weight:600;
     letter-spacing:.02em;
-    white-space:nowrap;
+    padding:8px 16px;
+    border-radius:30px;
+    margin:6px 0 18px;
   }
-  .deliverable-card{
-    flex:1;
-    min-width:220px;
-    background:linear-gradient(135deg, rgba(201,162,75,0.16), rgba(185,30,43,0.06));
-    border:1.5px solid var(--brass);
-    border-radius:14px;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .deliverable-card svg{flex-shrink:0;}
-  .deliverable-label{
-    font-size:10.5px;
-    letter-spacing:.1em;
+
+  .roster-label{
+    font-size:12px;
+    letter-spacing:.14em;
     text-transform:uppercase;
     color:var(--cardinal-deep);
     font-weight:700;
-    margin-bottom:2px;
-  }
-  .deliverable-text{
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink);
-    line-height:1.35;
+    margin-bottom:14px;
   }
 
-  /* nav arrows */
-  .daynav{
-    display:flex;
-    justify-content:space-between;
-    margin-top:24px;
+  .roster{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+    text-align:left;
   }
-  .navbtn{
+  @media (max-width:480px){
+    .roster{grid-template-columns:1fr;}
+  }
+  .member{
+    background:#fff;
+    border:1px solid var(--mercury);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:15px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    opacity:0;
+    transform:translateY(10px);
+  }
+  .member.animate-in{
+    animation:memberIn .45s ease forwards;
+  }
+  .member.you{
+    border-color:var(--cardinal);
+    background:rgba(185,30,43,0.05);
+  }
+  .member .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--brass);
+    flex-shrink:0;
+  }
+  .member.you .dot{background:var(--cardinal);}
+  @keyframes memberIn{ to{opacity:1; transform:translateY(0);} }
+
+  .again{
+    margin-top:32px;
     background:none;
     border:1.5px solid var(--ink);
     color:var(--ink);
     font-family:'Work Sans', sans-serif;
-    font-size:13px;
+    font-size:13.5px;
     font-weight:600;
-    padding:10px 18px;
+    letter-spacing:.04em;
+    padding:11px 22px;
     border-radius:30px;
     cursor:pointer;
     transition:background .2s, color .2s;
-    display:flex;
-    align-items:center;
-    gap:6px;
   }
-  .navbtn:hover:not(:disabled){
+  .again:hover{
     background:var(--ink);
     color:var(--parchment);
-  }
-  .navbtn:disabled{
-    opacity:0.3;
-    cursor:default;
   }
 
   footer{
     text-align:center;
-    margin-top:26px;
+    margin-top:22px;
     font-size:12px;
     color:#a39d8c;
     letter-spacing:.03em;
   }
 
-  @media (max-width:520px){
-    .card{padding:28px 20px 26px;}
-    .timeline{padding-left:20px;}
-    .titem::before{left:-25.5px;}
+  /* confetti */
+  .confetti-piece{
+    position:fixed;
+    top:-20px;
+    width:8px;height:14px;
+    opacity:0.9;
+    pointer-events:none;
+    z-index:50;
+  }
+  @keyframes fall{
+    to{ transform:translateY(105vh) rotate(540deg); opacity:0.2; }
   }
 </style>
 </head>
 <body>
 
 <div class="stage">
-  <div class="brandbar">Bangor University · Semester Zero</div>
+  <div class="brandbar">ING College of Innovation and Leadership</div>
 
-  <div class="hero">
-    <span class="kicker">Full Week Schedule</span>
-    <h1>Innovation Sprint Itinerary</h1>
-    <p>Six days, one journey — from your very first team huddle to the final showcase. Here's exactly what each day holds.</p>
+  
+
+  <div class="card">
+
+    <!-- LOOKUP VIEW -->
+    <div class="lookup" id="lookupView">
+      <h1 class="title">Find Your Team</h1>
+      <p class="sub">Type your name to reveal your team.</p>
+
+      <div class="field">
+        <label for="nameInput">Your name</label>
+        <input id="nameInput" type="text" autocomplete="off" placeholder="Start typing your name…" />
+        <div class="suggestions" id="suggestions"></div>
+      </div>
+      <p class="helper">Can't find your name? Check with your program coordinator at the registration desk.</p>
+      <p class="helper" id="dataStatus" style="margin-top:4px;">Loading roster…</p>
+    </div>
+
+    <!-- REVEAL VIEW -->
+    <div class="reveal" id="revealView">
+      <div class="greeting">Welcome, <b id="revealNameLabel"></b></div>
+      <div class="roster-label" id="youAreIn">You are in</div>
+      <div class="team-name" id="teamNameLabel"></div>
+      <div class="location-chip" id="locationChip" style="display:none;"></div>
+      <div class="team-rule" id="teamRule"></div>
+      <div class="roster-label">Your teammates</div>
+      <div class="roster" id="rosterGrid"></div>
+      <a href="itinerary.html" class="again" style="text-decoration:none; background:var(--ink); color:var(--parchment); border-color:var(--ink); margin-top:0;">View week's itinerary →</a>
+      <button class="again" id="againBtn">Search another name</button>
+    </div>
+
   </div>
 
-  <div class="weekbar" id="weekbar"></div>
-  <div class="tabs" id="tabs"></div>
-
-  <div class="card" id="dayCard"></div>
-
-  <div class="daynav">
-    <button class="navbtn" id="prevBtn">← Previous day</button>
-    <button class="navbtn" id="homeBtn" onclick="window.location.href='index.html'">
-    Go to Home
-</button>    <button class="navbtn" id="nextBtn">Next day →</button>
-  </div>
-
-  <footer>ING College of Innovation and Leadership · Programme Closing Event</footer>
+  <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
 </div>
 
 <script>
-const DAYS = [
-  {
-    label:"Kickoff",
-    title:"Day 1 — Kickoff & Discovery",
-    theme:"Set the stage, form teams, decide on the theme for the event",
-    total:"4.5 Hours",
-    deliverable:"Theme for the event",
-    items:[
-      {focus:"Opening & Challenge Briefing", desc:"Innovation Sprint introduction, team formation, decide roles, briefing on expectations."},
-      {focus:"Research & Problem Analysis", desc:"Problem exploration, user analysis, evidence gathering for the selected themes, including inquiry and discussion activities, surveys if applicable."},
-      {focus:"Primary and Secondary Theme Lock-in", desc:"Teams draft and present one-line problem statements for the primary and secondary themes to mentors for sign-off and complete the Google Form to finalize their selection."}
-    ]
-  },
-  {
-    label:"Ideation",
-    title:"Day 2 — Ideation & Concept Development",
-    theme:"Go wide, then converge on one strong concept",
-    total:"4.5 Hours",
-    deliverable:"Locked concept, ready for building",
-    items:[
-      {focus:"Confirmation on the Finalized Theme", desc:"Mentors will give reflections on the selected themes for each group.", duration:"30 Min"},
-      {focus:"Brainstorming & Solution Mapping", desc:"Divergent ideation, solution mapping exercises.", duration:"1 Hour"},
-      {focus:"Feasibility Analysis", desc:"Innovation workshops, evaluating ideas against feasibility/impact.", duration:"1.5 Hours"},
-      {focus:"Concept Development & Pitch", desc:"Teams refine one chosen concept and pitch it to mentors for a go/no-go check.", duration:"1 Hour"}
-    ]
-  },
-  {
-    label:"Build I",
-    title:"Day 3 — Build Day 1: Foundation",
-    theme:"Turn the concept into a working structure",
-    total:"6.25 Hours",
-    deliverable:"Working core prototype (rough but functional)",
-    items:[
-      {focus:"Workflow & Architecture", desc:"Mapping out the build plan, workflow/user-flow creation, and task division within teams.", duration:"1 Hour"},
-      {focus:"Core Build", desc:"Prototype/mock-up development, building the core functionality first.", duration:"3 Hours"},
-      {focus:"Mentor Check-in", desc:"Mid-build mentor feedback round and troubleshooting.", duration:"45 Min"},
-      {focus:"Continued Build", desc:"Iterative improvement based on mentor feedback.", duration:"1.5 Hours"}
-    ]
-  },
-  {
-    label:"Build II",
-    title:"Day 4 — Build Day 2: Refinement",
-    theme:"Polish the build into something demo-ready",
-    total:"5.25 Hours",
-    deliverable:"Demo-ready prototype, fully signed off",
-    items:[
-      {focus:"Refinement & Iteration", desc:"Bug fixing, edge-case handling, and feature polish based on Day 3 feedback.", duration:"2.5 Hours"},
-      {focus:"Final Mentor Review", desc:"Final checkpoint with mentors — build is signed off as demo-ready.", duration:"45 Min"},
-      {focus:"Final Build Push", desc:"Last fixes, packaging the prototype/mock-up for demoing, and testing under demo conditions.", duration:"2 Hours"}
-    ]
-  },
-  {
-    label:"Rehearsal",
-    title:"Day 5 — Rehearsal & Showcase Prep",
-    theme:"Turn the build into a story, and pressure-test everything before showcase day",
-    total:"5.75 Hours",
-    deliverable:"Rehearsed, polished pitch, team fully showcase-ready",
-    items:[
-      {focus:"Presentation & Storytelling Prep", desc:"Building slides/demo flow, crafting the narrative, and assigning speaking roles.", duration:"1.5 Hours"},
-      {focus:"First Run-through", desc:"Full practice run per team, timed.", duration:"1 Hour"},
-      {focus:"Peer & Mentor Feedback Round", desc:"Teams present to mentors/peers and receive feedback on pitch and delivery.", duration:"1 Hour"},
-      {focus:"Final Polish & Buffer", desc:"Incorporating feedback, fixing any last-minute technical issues, and contingency time.", duration:"1.5 Hours"},
-      {focus:"Rehearsal", desc:"Final full run-through and logistics walkthrough for showcase day (staging, order, timing).", duration:"45 Min"}
-    ]
-  },
-  {
-    label:"Showcase",
-    title:"Day 6 — Presentation, Showcase & Semester Zero Closing",
-    theme:"Show it off, reflect, and celebrate the semester",
-    total:"6 Hours",
-    deliverable:"Completed showcase, certificates awarded, semester formally closed",
-    items:[
-      {focus:"Final Setup", desc:"Booth/stage setup, tech checks, and last-minute touches.", duration:"1 Hour"},
-      {focus:"Showcase", desc:"Friends and family members will be invited to attend the showcase and explore the participants' work and achievements.", duration:"4 Hours"},
-      {focus:"Semester Zero Closing Ceremony", desc:"Certificate distribution and closing remarks.", duration:"1 Hour"}
-    ]
+// ---------- LIVE DATA SOURCE ----------
+// Published Google Sheet (CSV). Update this link any time you republish.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRz1tawR9h-vUU0EsatIM0iWeEb9lILB-DiPdHmm0jCxQVIKcUx8Z1GHTb1xJrTw2Bk8nJF9Bfpk_Kv/pub?gid=0&single=true&output=csv";
+// If live fetching still fails once hosted (not opened locally), try the alternate
+// export URL format instead: https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/export?format=csv&gid=0
+
+// ---------- BACKUP DATA (used only if the live sheet can't be reached) ----------
+const BACKUP_GROUPS = {
+  "1": ["Aarambha Neupane","Aayush Karki","Akshath Basnet","Angel Maharjan","Bidhan Mishra","Bigyata Shrestha","Bishal Khadka","Garima Shrestha","Gunila Napit","Kabim Dhungel"],
+  "2": ["Kohinoor Tiwari","Kriti Shakya","Lisha Bogati","Meghmala Shrestha","Prajita Mudbhari","Preram Kutu","Priyanshu Khadka","Ritisha Aryal","Riwaaz Budhathoki","Roshan Subedi"],
+  "3": ["Roshish Manandhar","Sarthak Shrestha","Saurya Pradhan","Shivwam Shrestha","Swornim Dahal","Tanusha Lohani","Angel Shrestha","Bishma Maharjan","Harshika Shrestha","Palaska Shingh"],
+  "4": ["Riwaz Amatya","Prabesh Acharya","Sulav Subedi","Aayush Tamrakar","Anup Dharel","Ayush Bajracharya","Dip KC","Rozyan Nemkhu","Samira Shrestha","Samragi Karki"],
+  "5": ["Aryan Basnet","Pranish Rajkarnikar","Sneha Pant","Luniva Shrestha","Nischal Dhakal","Sarbani Joshi","Najnin Praween","Aarjav Lal Shrestha","Abhaya Shrestha","Suraksha Neupane"],
+  "6": ["Tulsi Ram Shrestha","Bikash Maharjan","Pujan Panta","Roshan Kumar Sharma","Sujata Nakarmi","Rikesh Rimal","Sarvesh Karki","Shreeya Shrestha","Shubhankar Chudal","Suyash Babu Pandey"],
+  "7": ["Amshu Shivabhakti","Anisha Shrestha","Anubhav Bajracharya","Archit Sah","Dennis Thapa","Madan Bahadur Majhi","Shambhav Ratna Shakya","Zara Shahi","Roshan Maharjan","Yasu Shakya"],
+  "8": ["Prashant Ghimire","Aditi Rimal","Dipin Karki","Prasanna Koirala","Samriddha Shrestha","Siddhant Shrestha","Utsav Bogati","Himesh Awasthi","Pranish Dhakal","Sworit Suwal"],
+  "9": ["Sudarshan Shrestha","Rohan Shrestha","Bibek Jyu Thakuri","Sayam Shrestha","Adrisha Shakya","Reebha Tuladhar","Samip Bhattarai","Saugat Kamal Upreti","Prabesh Pandit","Bidhan Amatya"],
+  "10": ["Shishir Gupta","Aarab Byanjankar","Aarabi Byanjankar","Bishesh Shakya","Dilasha Khadgi","Nabin Dong","Nischaya Tamrakar","Sharbin Shrestha","Subash Kumar Gain","Aashraya Shakya","Bigyan Shrestha","Subarna Shrestha"],
+  "11": ["Yajju Ratna Bajracharya","Aashrika Rimal","Aditya Kumar Mandal","Anjila Shah","Aron Thapa","Arya Man Singh Katuwal","Aryan Jung Basnet","Ashutosh Basnet","Dev Raj Yogi","Jay Prakash Sah","Kushal Dahal","Purshottam Shrestha"],
+  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"]
+};
+
+let GROUPS = BACKUP_GROUPS;
+let GROUP_META = {};
+let INDEX = [];
+
+function buildIndex(){
+  INDEX = [];
+  Object.keys(GROUPS).forEach(g => {
+    GROUPS[g].forEach(name => INDEX.push({ name, group: g }));
+  });
+}
+buildIndex();
+
+// ---------- CSV parsing (handles quoted fields/commas) ----------
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for(let i=0; i<text.length; i++){
+    const c = text[i], next = text[i+1];
+    if(inQuotes){
+      if(c === '"' && next === '"'){ field += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else { field += c; }
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === ','){ row.push(field); field = ''; }
+      else if(c === '\n' || c === '\r'){
+        if(c === '\r' && next === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else { field += c; }
+    }
   }
-];
-
-let activeDay = 0;
-
-const tabsEl = document.getElementById('tabs');
-const weekbarEl = document.getElementById('weekbar');
-const cardEl = document.getElementById('dayCard');
-const prevBtn = document.getElementById('prevBtn');
-const homeBtn = document.getElementById('homeBtn');
-const nextBtn = document.getElementById('nextBtn');
-
-function trophyIcon(){
-  return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-    <path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" stroke="#7F141D" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M12 13v3" stroke="#7F141D" stroke-width="1.6"/>
-    <path d="M8 20h8" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M9.5 16.5h5L15 20H9l.5-3.5Z" stroke="#7F141D" stroke-width="1.6" stroke-linejoin="round"/>
-  </svg>`;
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => r.length && r.some(v => v.trim() !== ''));
 }
 
-function renderTabs(){
-  tabsEl.innerHTML = DAYS.map((d, i) =>
-    `<div class="tab ${i===activeDay?'active':''}" data-idx="${i}">
-       <div class="tnum">Day ${i+1}</div>
-       <div class="tlabel">${d.label}</div>
+function groupsFromRows(rows){
+  if(!rows.length) return null;
+  const header = rows[0].map(h => h.trim().toLowerCase());
+  const groupIdx = header.findIndex(h => h.includes('group'));
+  const nameIdx = header.findIndex(h => h.includes('name'));
+  const floorIdx = header.findIndex(h => h.includes('floor'));
+  const roomIdx = header.findIndex(h => h.includes('room'));
+  if(groupIdx === -1 || nameIdx === -1) return null;
+
+  const out = {};
+  const meta = {};
+  for(let i=1; i<rows.length; i++){
+    const r = rows[i];
+    const g = (r[groupIdx] || '').toString().trim();
+    const name = (r[nameIdx] || '').toString().replace(/\s+/g, ' ').trim();
+    if(!g || !name) continue;
+    if(!out[g]) out[g] = [];
+    out[g].push(name);
+
+    if(!meta[g]) meta[g] = {};
+    if(floorIdx !== -1){
+      const floor = (r[floorIdx] || '').toString().trim();
+      if(floor) meta[g].floor = floor;
+    }
+    if(roomIdx !== -1){
+      const room = (r[roomIdx] || '').toString().trim();
+      if(room) meta[g].room = room;
+    }
+  }
+  GROUP_META = meta;
+  return Object.keys(out).length ? out : null;
+}
+
+function loadLiveData(){
+  const statusEl = document.getElementById('dataStatus');
+  fetch(SHEET_CSV_URL, { cache: 'no-store' })
+    .then(res => { if(!res.ok) throw new Error('Bad response'); return res.text(); })
+    .then(text => {
+      const rows = parseCSV(text);
+      const live = groupsFromRows(rows);
+      if(live){
+        GROUPS = live;
+        buildIndex();
+        if(statusEl) statusEl.textContent = 'Live roster loaded';
+      } else {
+        throw new Error('Could not parse sheet');
+      }
+    })
+    .catch((err) => {
+      GROUPS = BACKUP_GROUPS;
+      buildIndex();
+      if(statusEl) statusEl.textContent = 'Showing saved roster (live fetch failed: ' + err.message + ')';
+      console.warn('Live sheet fetch failed:', err);
+    });
+}
+loadLiveData();
+
+// ---------- DOM ----------
+const input = document.getElementById('nameInput');
+const suggestionsBox = document.getElementById('suggestions');
+const lookupView = document.getElementById('lookupView');
+const revealView = document.getElementById('revealView');
+const sealSvg = document.getElementById('sealSvg');
+const again = document.getElementById('againBtn');
+
+let activeIndex = -1;
+let currentMatches = [];
+
+function normalize(s){
+  return s.toLowerCase().replace(/\s+/g,' ').trim();
+}
+
+function renderSuggestions(query){
+  const q = normalize(query);
+  if(!q){
+    suggestionsBox.classList.remove('open');
+    suggestionsBox.innerHTML = '';
+    currentMatches = [];
+    return;
+  }
+  currentMatches = INDEX.filter(item => normalize(item.name).includes(q)).slice(0, 8);
+  activeIndex = -1;
+
+  if(currentMatches.length === 0){
+    suggestionsBox.innerHTML = '<div class="no-match">No matching name yet — keep typing, or check spelling.</div>';
+    suggestionsBox.classList.add('open');
+    return;
+  }
+
+  suggestionsBox.innerHTML = currentMatches.map((item, i) =>
+    `<div class="suggestion" data-idx="${i}">
+       <span>${item.name}</span>
      </div>`
   ).join('');
-  tabsEl.querySelectorAll('.tab').forEach(el => {
-    el.addEventListener('click', () => goToDay(parseInt(el.getAttribute('data-idx'), 10)));
+  suggestionsBox.classList.add('open');
+
+  Array.from(suggestionsBox.querySelectorAll('.suggestion')).forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.getAttribute('data-idx'), 10);
+      selectStudent(currentMatches[idx]);
+    });
   });
 }
 
-function renderWeekbar(){
-  weekbarEl.innerHTML = DAYS.map((d, i) =>
-    `<div class="weekdot ${i===activeDay ? 'active' : (i<activeDay ? 'passed':'')}" data-idx="${i}" title="Day ${i+1}: ${d.label}"></div>`
-  ).join('');
-  weekbarEl.querySelectorAll('.weekdot').forEach(el => {
-    el.addEventListener('click', () => goToDay(parseInt(el.getAttribute('data-idx'), 10)));
-  });
+input.addEventListener('input', (e) => renderSuggestions(e.target.value));
+
+input.addEventListener('keydown', (e) => {
+  const items = Array.from(suggestionsBox.querySelectorAll('.suggestion'));
+  if(!items.length) return;
+  if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    activeIndex = Math.min(activeIndex + 1, items.length - 1);
+    updateActive(items);
+  } else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    activeIndex = Math.max(activeIndex - 1, 0);
+    updateActive(items);
+  } else if(e.key === 'Enter'){
+    e.preventDefault();
+    if(activeIndex >= 0 && currentMatches[activeIndex]){
+      selectStudent(currentMatches[activeIndex]);
+    } else if(currentMatches.length === 1){
+      selectStudent(currentMatches[0]);
+    }
+  }
+});
+
+function updateActive(items){
+  items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
 }
 
-function renderDay(){
-  const d = DAYS[activeDay];
-  cardEl.innerHTML = `
-    <div class="day-head">
-      <div class="day-eyebrow">Day ${activeDay+1} of ${DAYS.length}</div>
-      <div class="day-title">${d.title.replace(/^Day \d+ — /,'')}</div>
-      <div class="day-theme">${d.theme}</div>
-    </div>
-    <div class="timeline" id="timeline">
-      ${d.items.map((it,i) => `
-        <div class="titem" style="animation-delay:${0.08*i}s" data-order="${i}">
-          <div class="titem-head">
-            <div class="titem-focus">${it.focus}</div>
-            ${it.duration ? `<div class="titem-duration">${it.duration}</div>` : ``}
-          </div>
-          <div class="titem-desc">${it.desc}</div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="day-summary">
-      <div class="total-chip">Day Total · ${d.total}</div>
-      <div class="deliverable-card">
-        ${trophyIcon()}
-        <div>
-          <div class="deliverable-label">End-of-day deliverable</div>
-          <div class="deliverable-text">${d.deliverable}</div>
-        </div>
-      </div>
-    </div>
-  `;
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.field')){
+    suggestionsBox.classList.remove('open');
+  }
+});
+
+function selectStudent(item){
+  suggestionsBox.classList.remove('open');
+  input.value = item.name;
+  sealSvg.classList.add('cracked');
+  setTimeout(() => showReveal(item), 280);
+}
+
+function showReveal(item){
+  lookupView.classList.add('hide');
+  revealView.classList.add('show');
+
+  document.getElementById('revealNameLabel').textContent = item.name.split(' ')[0];
+  document.getElementById('teamNameLabel').textContent = `Group ${item.group}`;
+
+  const locationChip = document.getElementById('locationChip');
+  const meta = GROUP_META[item.group];
+  if(meta && (meta.floor || meta.room)){
+    const parts = [];
+    if(meta.floor) parts.push(meta.floor);
+    if(meta.room) parts.push(meta.room);
+    locationChip.textContent = parts.join(' · ');
+    locationChip.style.display = 'inline-flex';
+  } else {
+    locationChip.style.display = 'none';
+  }
+
+  const teamNameEl = document.getElementById('teamNameLabel');
+  const ruleEl = document.getElementById('teamRule');
+  teamNameEl.classList.remove('animate-in'); void teamNameEl.offsetWidth; teamNameEl.classList.add('animate-in');
+  ruleEl.classList.remove('animate-in'); void ruleEl.offsetWidth; ruleEl.classList.add('animate-in');
+
+  const roster = document.getElementById('rosterGrid');
+  const members = GROUPS[item.group];
+  roster.innerHTML = members.map((name, i) => {
+    const isYou = name === item.name;
+    return `<div class="member ${isYou ? 'you' : ''}" style="animation-delay:${0.15 + i*0.06}s">
+              <span class="dot"></span><span>${name}${isYou ? ' (you)' : ''}</span>
+            </div>`;
+  }).join('');
 
   requestAnimationFrame(() => {
-    cardEl.querySelectorAll('.titem').forEach(el => el.classList.add('animate-in'));
+    roster.querySelectorAll('.member').forEach(el => el.classList.add('animate-in'));
   });
 
-  prevBtn.disabled = activeDay === 0;n
-  nextBtn.disabled = activeDay === DAYS.length - 1;
-  nextBtn.textContent = activeDay === DAYS.length - 1 ? 'Final day ✓' : 'Next day →';
+  launchConfetti();
 }
 
-function goToDay(idx){
-  if(idx < 0 || idx >= DAYS.length) return;
-  activeDay = idx;
-  renderTabs();
-  renderWeekbar();
-  renderDay();
-  const activeTab = tabsEl.querySelector('.tab.active');
-  if(activeTab) activeTab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+again.addEventListener('click', () => {
+  revealView.classList.remove('show');
+  lookupView.classList.remove('hide');
+  input.value = '';
+  input.focus();
+  sealSvg.classList.remove('cracked');
+});
+
+// ---------- lightweight confetti ----------
+function launchConfetti(){
+  const colors = ['#B91E2B', '#C9A24B', '#E4CC8B', '#7F141D'];
+  const count = 26;
+  for(let i=0; i<count; i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random()*100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animation = `fall ${2.2 + Math.random()*1.4}s ease-in forwards`;
+    piece.style.animationDelay = (Math.random()*0.4) + 's';
+    piece.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
 }
-
-prevBtn.addEventListener('click', () => goToDay(activeDay - 1));
-nextBtn.addEventListener('click', () => goToDay(activeDay + 1));
-
-renderTabs();
-renderWeekbar();
-renderDay();
 </script>
 </body>
 </html>
