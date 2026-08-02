@@ -508,7 +508,6 @@ const input = document.getElementById('nameInput');
 const suggestionsBox = document.getElementById('suggestions');
 const lookupView = document.getElementById('lookupView');
 const revealView = document.getElementById('revealView');
-const sealSvg = document.getElementById('sealSvg');
 const again = document.getElementById('againBtn');
 
 let activeIndex = -1;
@@ -586,7 +585,7 @@ document.addEventListener('click', (e) => {
 function selectStudent(item){
   suggestionsBox.classList.remove('open');
   input.value = item.name;
-  sealSvg.classList.add('cracked');
+  
   setTimeout(() => showReveal(item), 280);
 }
 
