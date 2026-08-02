@@ -345,16 +345,24 @@
 <body>
 
 <div class="stage">
-  <div class="brandbar">ING College of Innovation and Leadership</div>
+  <div class="brandbar">Bangor University · Closing Event</div>
 
-  
+  <div class="seal-wrap">
+    <svg class="seal" id="sealSvg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="56" fill="#7F141D"/>
+      <circle cx="60" cy="60" r="56" fill="none" stroke="#C9A24B" stroke-width="2.5"/>
+      <circle cx="60" cy="60" r="47" fill="none" stroke="#C9A24B" stroke-width="1" stroke-dasharray="2 4"/>
+      <path d="M60 26 L68 46 L90 46 L72 59 L79 80 L60 67 L41 80 L48 59 L30 46 L52 46 Z" fill="#E4CC8B"/>
+      <text x="60" y="103" text-anchor="middle" fill="#E4CC8B" font-family="Georgia, serif" font-size="9" letter-spacing="2">EST. 1884</text>
+    </svg>
+  </div>
 
   <div class="card">
 
     <!-- LOOKUP VIEW -->
     <div class="lookup" id="lookupView">
       <h1 class="title">Find Your Team</h1>
-      <p class="sub">Type your name to reveal your team.</p>
+      <p class="sub">Scan complete — now let's find your crew for the day.<br>Type your name to reveal your team.</p>
 
       <div class="field">
         <label for="nameInput">Your name</label>
@@ -363,6 +371,9 @@
       </div>
       <p class="helper">Can't find your name? Check with your program coordinator at the registration desk.</p>
       <p class="helper" id="dataStatus" style="margin-top:4px;">Loading roster…</p>
+      <div style="text-align:center; margin-top:22px;">
+        <a href="itinerary.html" style="color:#7F141D; font-size:13.5px; font-weight:600; text-decoration:none; border-bottom:1.5px solid #C9A24B; padding-bottom:2px;">View the week's itinerary →</a>
+      </div>
     </div>
 
     <!-- REVEAL VIEW -->
@@ -374,13 +385,15 @@
       <div class="team-rule" id="teamRule"></div>
       <div class="roster-label">Your teammates</div>
       <div class="roster" id="rosterGrid"></div>
-      <a href="itinerary.html" class="again" style="text-decoration:none; background:var(--ink); color:var(--parchment); border-color:var(--ink); margin-top:0;">View week's itinerary →</a>
-      <button class="again" id="againBtn">Search another name</button>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
+        <a href="itinerary.html" class="again" style="text-decoration:none; background:var(--ink); color:var(--parchment); border-color:var(--ink); margin-top:0;">View week's itinerary →</a>
+        <button class="again" id="againBtn" style="margin-top:0;">Search another name</button>
+      </div>
     </div>
 
   </div>
 
-  <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
+  <footer>ING College of Innovation and Leadership · Programme Closing Event</footer>
 </div>
 
 <script>
