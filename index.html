@@ -240,6 +240,21 @@
   @keyframes growLine{ to{ transform:scaleX(1);} }
   @keyframes riseFade{ to{ opacity:1; transform:translateY(0);} }
 
+  .location-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(201,162,75,0.14);
+    border:1px solid var(--brass);
+    color:var(--cardinal-deep);
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:.02em;
+    padding:8px 16px;
+    border-radius:30px;
+    margin:6px 0 18px;
+  }
+
   .roster-label{
     font-size:12px;
     letter-spacing:.14em;
@@ -330,24 +345,16 @@
 <body>
 
 <div class="stage">
-  <div class="brandbar">Bangor University · Closing Event</div>
+  <div class="brandbar">ING College of Innovation and Leadership</div>
 
-  <div class="seal-wrap">
-    <svg class="seal" id="sealSvg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="56" fill="#7F141D"/>
-      <circle cx="60" cy="60" r="56" fill="none" stroke="#C9A24B" stroke-width="2.5"/>
-      <circle cx="60" cy="60" r="47" fill="none" stroke="#C9A24B" stroke-width="1" stroke-dasharray="2 4"/>
-      <path d="M60 26 L68 46 L90 46 L72 59 L79 80 L60 67 L41 80 L48 59 L30 46 L52 46 Z" fill="#E4CC8B"/>
-      <text x="60" y="103" text-anchor="middle" fill="#E4CC8B" font-family="Georgia, serif" font-size="9" letter-spacing="2">EST. 1884</text>
-    </svg>
-  </div>
+  
 
   <div class="card">
 
     <!-- LOOKUP VIEW -->
     <div class="lookup" id="lookupView">
       <h1 class="title">Find Your Team</h1>
-      <p class="sub">Scan complete — now let's find your crew for the day.<br>Type your name to reveal your team.</p>
+      <p class="sub">Type your name to reveal your team.</p>
 
       <div class="field">
         <label for="nameInput">Your name</label>
@@ -363,6 +370,7 @@
       <div class="greeting">Welcome, <b id="revealNameLabel"></b></div>
       <div class="roster-label" id="youAreIn">You are in</div>
       <div class="team-name" id="teamNameLabel"></div>
+      <div class="location-chip" id="locationChip" style="display:none;"></div>
       <div class="team-rule" id="teamRule"></div>
       <div class="roster-label">Your teammates</div>
       <div class="roster" id="rosterGrid"></div>
@@ -371,13 +379,15 @@
 
   </div>
 
-  <footer>ING College of Innovation and Leadership · Programme Closing Event</footer>
+  <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
 </div>
 
 <script>
 // ---------- LIVE DATA SOURCE ----------
 // Published Google Sheet (CSV). Update this link any time you republish.
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRz1tawR9h-vUU0EsatIM0iWeEb9lILB-DiPdHmm0jCxQVIKcUx8Z1GHTb1xJrTw2Bk8nJF9Bfpk_Kv/pub?gid=0&single=true&output=csv";
+// If live fetching still fails once hosted (not opened locally), try the alternate
+// export URL format instead: https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/export?format=csv&gid=0
 
 // ---------- BACKUP DATA (used only if the live sheet can't be reached) ----------
 const BACKUP_GROUPS = {
@@ -392,11 +402,11 @@ const BACKUP_GROUPS = {
   "9": ["Sudarshan Shrestha","Rohan Shrestha","Bibek Jyu Thakuri","Sayam Shrestha","Adrisha Shakya","Reebha Tuladhar","Samip Bhattarai","Saugat Kamal Upreti","Prabesh Pandit","Bidhan Amatya"],
   "10": ["Shishir Gupta","Aarab Byanjankar","Aarabi Byanjankar","Bishesh Shakya","Dilasha Khadgi","Nabin Dong","Nischaya Tamrakar","Sharbin Shrestha","Subash Kumar Gain","Aashraya Shakya","Bigyan Shrestha","Subarna Shrestha"],
   "11": ["Yajju Ratna Bajracharya","Aashrika Rimal","Aditya Kumar Mandal","Anjila Shah","Aron Thapa","Arya Man Singh Katuwal","Aryan Jung Basnet","Ashutosh Basnet","Dev Raj Yogi","Jay Prakash Sah","Kushal Dahal","Purshottam Shrestha"],
-  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"],
-  "13": ["umesh nepal"]
+  "12": ["Raj Kishor Das","Rishim Mukarung Rai","Rose Bhatta","Samriddhi Shrestha","Samyak Shakya","Shohan Basnet","Sitishma Acharya","Sulav Budthapa","Surag Shrestha","Suyash Suwal","Swopnil Basnet","Tejashwi Shrestha"]
 };
 
 let GROUPS = BACKUP_GROUPS;
+let GROUP_META = {};
 let INDEX = [];
 
 function buildIndex(){
@@ -435,9 +445,12 @@ function groupsFromRows(rows){
   const header = rows[0].map(h => h.trim().toLowerCase());
   const groupIdx = header.findIndex(h => h.includes('group'));
   const nameIdx = header.findIndex(h => h.includes('name'));
+  const floorIdx = header.findIndex(h => h.includes('floor'));
+  const roomIdx = header.findIndex(h => h.includes('room'));
   if(groupIdx === -1 || nameIdx === -1) return null;
 
   const out = {};
+  const meta = {};
   for(let i=1; i<rows.length; i++){
     const r = rows[i];
     const g = (r[groupIdx] || '').toString().trim();
@@ -445,7 +458,18 @@ function groupsFromRows(rows){
     if(!g || !name) continue;
     if(!out[g]) out[g] = [];
     out[g].push(name);
+
+    if(!meta[g]) meta[g] = {};
+    if(floorIdx !== -1){
+      const floor = (r[floorIdx] || '').toString().trim();
+      if(floor) meta[g].floor = floor;
+    }
+    if(roomIdx !== -1){
+      const room = (r[roomIdx] || '').toString().trim();
+      if(room) meta[g].room = room;
+    }
   }
+  GROUP_META = meta;
   return Object.keys(out).length ? out : null;
 }
 
@@ -464,10 +488,11 @@ function loadLiveData(){
         throw new Error('Could not parse sheet');
       }
     })
-    .catch(() => {
+    .catch((err) => {
       GROUPS = BACKUP_GROUPS;
       buildIndex();
-      if(statusEl) statusEl.textContent = 'Showing saved roster (offline)';
+      if(statusEl) statusEl.textContent = 'Showing saved roster (live fetch failed: ' + err.message + ')';
+      console.warn('Live sheet fetch failed:', err);
     });
 }
 loadLiveData();
@@ -565,6 +590,18 @@ function showReveal(item){
 
   document.getElementById('revealNameLabel').textContent = item.name.split(' ')[0];
   document.getElementById('teamNameLabel').textContent = `Group ${item.group}`;
+
+  const locationChip = document.getElementById('locationChip');
+  const meta = GROUP_META[item.group];
+  if(meta && (meta.floor || meta.room)){
+    const parts = [];
+    if(meta.floor) parts.push(`Floor ${meta.floor}`);
+    if(meta.room) parts.push(`Room ${meta.room}`);
+    locationChip.textContent = parts.join(' · ');
+    locationChip.style.display = 'inline-flex';
+  } else {
+    locationChip.style.display = 'none';
+  }
 
   const teamNameEl = document.getElementById('teamNameLabel');
   const ruleEl = document.getElementById('teamRule');
