@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Roles — Innovation Week</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cardinal:#B91E2B;
+    --cardinal-deep:#7F141D;
+    --ink:#1A1712;
+    --stone:#F4EEE3;
+    --parchment:#FBF7EF;
+    --brass:#C9A24B;
+    --brass-soft:#E4CC8B;
+    --mercury:#E7E1D4;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 800px at 15% -10%, rgba(185,30,43,0.10), transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, rgba(201,162,75,0.14), transparent 55%),
+      var(--stone);
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    padding:40px 16px 60px;
+  }
+  .stage{width:100%; max-width:980px;}
+
+  .brandbar{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-bottom:24px; color:var(--cardinal-deep);
+    letter-spacing:.16em; font-size:11.5px; font-weight:600; text-transform:uppercase;
+  }
+  .brandbar::before, .brandbar::after{
+    content:""; height:1px; width:38px;
+    background:linear-gradient(90deg, transparent, var(--brass), transparent);
+  }
+
+  .hero{text-align:center; margin-bottom:38px;}
+  .hero .kicker{
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--brass-soft); background:var(--ink); display:inline-block;
+    padding:6px 14px; border-radius:20px; font-weight:700; margin-bottom:16px;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif; font-weight:600;
+    font-size:clamp(30px,6vw,46px); margin:0 0 10px; letter-spacing:-0.01em;
+  }
+  .hero p{
+    margin:0 auto; color:#5b5648; font-size:15.5px; line-height:1.6; max-width:520px;
+  }
+  .hero-rule{
+    width:64px; height:3px; margin:20px auto 0;
+    background:linear-gradient(90deg, var(--brass), var(--cardinal));
+    border-radius:3px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+  }
+  @media (max-width:820px){
+    .grid{grid-template-columns:repeat(2, 1fr);}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .rolecard{
+    background:var(--parchment);
+    border:1px solid rgba(201,162,75,0.35);
+    border-radius:18px;
+    padding:28px 24px 26px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 18px 36px -18px rgba(26,23,18,0.28);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(16px);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .rolecard.animate-in{
+    animation:cardIn .55s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes cardIn{ to{ opacity:1; transform:translateY(0);} }
+  .rolecard:hover{
+    transform:translateY(-4px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 26px 44px -18px rgba(26,23,18,0.34);
+  }
+  .rolecard::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(185,30,43,0.05), transparent 30%);
+    pointer-events:none;
+  }
+
+  .role-num{
+    position:absolute;
+    top:16px; right:18px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:13px;
+    color:var(--brass);
+    opacity:0.7;
+  }
+
+  .icon-wrap{
+    width:48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(185,30,43,0.07);
+    border-radius:12px;
+    margin-bottom:16px;
+  }
+
+  .role-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:19px;
+    color:var(--ink);
+    margin:0 0 10px;
+  }
+  .role-rule{
+    width:34px; height:3px; margin-bottom:12px;
+    background:var(--brass);
+    border-radius:3px;
+  }
+  .role-desc{
+    font-size:14px;
+    line-height:1.55;
+    color:#5b5648;
+    margin:0;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:38px;
+    font-size:12px;
+    color:#a39d8c;
+    letter-spacing:.03em;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="brandbar">ING College of Innovation and Leadership</div>
+
+  <div class="hero">
+    <span class="kicker">Team Formation</span>
+    <h1>Build a Team With Clear Roles</h1>
+    <p>Six roles, one mission. Every strong team splits the work this way — know your role, own it, and lean on your teammates for the rest.</p>
+    <div class="hero-rule"></div>
+  </div>
+
+  <div class="grid" id="roleGrid"></div>
+
+  <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
+</div>
+
+<script>
+const ROLES = [
+  {
+    title: "Group Leader",
+    desc: "Coordinates the team, time, decisions, and mentor check-ins.",
+    icon: `<path d="M12 3l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16l-5.2 3 1-5.8-4.2-4.1 5.8-.8L12 3Z" stroke="#7F141D" stroke-width="1.6" stroke-linejoin="round"/>`
+  },
+  {
+    title: "User Researcher",
+    desc: "Interviews users, gathers evidence, and tests assumptions.",
+    icon: `<circle cx="10.5" cy="10.5" r="6.5" stroke="#7F141D" stroke-width="1.6"/><path d="M15.5 15.5L20 20" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round"/>`
+  },
+  {
+    title: "Business Lead",
+    desc: "Defines value, feasibility, stakeholders, and success measures.",
+    icon: `<path d="M4 19V10M10 19V5M16 19v-7M4 19h16" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`
+  },
+  {
+    title: "Design Lead",
+    desc: "Maps the journey, shapes the experience, and prepares the prototype.",
+    icon: `<path d="M12 20s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11Z" stroke="#7F141D" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" stroke="#7F141D" stroke-width="1.6"/>`
+  },
+  {
+    title: "Technical Lead",
+    desc: "Plans how it works and builds the interactive or technical parts.",
+    icon: `<path d="M9 6 3 12l6 6M15 6l6 6-6 6" stroke="#7F141D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`
+  },
+  {
+    title: "Story &amp; Testing Lead",
+    desc: "Collects feedback and turns the work into a clear final presentation.",
+    icon: `<path d="M4 5h16v9H8l-4 4V5Z" stroke="#7F141D" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" stroke="#7F141D" stroke-width="1.4" stroke-linecap="round"/>`
+  }
+];
+
+const grid = document.getElementById('roleGrid');
+grid.innerHTML = ROLES.map((r, i) => `
+  <div class="rolecard" style="animation-delay:${0.08 * i}s">
+    <div class="role-num">0${i + 1}</div>
+    <div class="icon-wrap">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">${r.icon}</svg>
+    </div>
+    <div class="role-title">${r.title}</div>
+    <div class="role-rule"></div>
+    <p class="role-desc">${r.desc}</p>
+  </div>
+`).join('');
+
+requestAnimationFrame(() => {
+  document.querySelectorAll('.rolecard').forEach(el => el.classList.add('animate-in'));
+});
+</script>
+</body>
+</html>
