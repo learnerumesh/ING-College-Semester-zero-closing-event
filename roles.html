@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Team Roles — Innovation Week</title>
+<title>Team Roles — Innovation Sprint</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -151,12 +151,111 @@
     color:#a39d8c;
     letter-spacing:.03em;
   }
+
+  /* ---- Problem domains section ---- */
+  .section-divider{
+    display:flex; align-items:center; gap:14px;
+    margin:56px 0 40px;
+  }
+  .section-divider::before, .section-divider::after{
+    content:""; flex:1; height:1px;
+    background:linear-gradient(90deg, transparent, var(--brass), transparent);
+  }
+  .section-divider span{
+    font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--cardinal-deep); font-weight:700; white-space:nowrap;
+  }
+
+  .domains-hero{text-align:center; margin-bottom:34px;}
+  .domains-hero h2{
+    font-family:'Fraunces', serif; font-weight:600;
+    font-size:clamp(26px,5vw,36px); margin:0 0 10px; letter-spacing:-0.01em;
+  }
+  .domains-hero h2 u{
+    text-decoration-color:var(--brass);
+    text-decoration-thickness:3px;
+    text-underline-offset:4px;
+  }
+  .domains-hero p{
+    margin:0 auto; color:#5b5648; font-size:15px; line-height:1.6; max-width:480px;
+  }
+
+  .domains-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  @media (max-width:720px){
+    .domains-grid{grid-template-columns:1fr;}
+  }
+
+  .domain-col{
+    background:var(--parchment);
+    border:1px solid rgba(201,162,75,0.35);
+    border-radius:18px;
+    padding:26px 24px 22px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 18px 36px -18px rgba(26,23,18,0.28);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(14px);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .domain-col::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(185,30,43,0.05), transparent 30%);
+    pointer-events:none;
+  }
+  .domain-col:hover{
+    transform:translateY(-4px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 26px 44px -18px rgba(26,23,18,0.34);
+  }
+  .domain-col.animate-in{
+    animation:cardIn .5s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .domain-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:19px;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .domain-rule{
+    width:34px; height:3px; margin-bottom:16px;
+    background:var(--brass);
+    border-radius:3px;
+  }
+  .domain-list{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .domain-list li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:14.5px;
+    color:var(--ink);
+    padding:9px 0;
+    border-bottom:1px solid var(--mercury);
+  }
+  .domain-list li:last-child{border-bottom:none;}
+  .domain-list li .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--brass);
+    margin-top:6px;
+    flex-shrink:0;
+  }
 </style>
 </head>
 <body>
 
 <div class="stage">
-  <div class="brandbar">ING College of Innovation and Leadership</div>
+  <div class="brandbar">ING College of Innovation and Leadership · Semester Zero</div>
 
   <div class="hero">
     <span class="kicker">Team Formation</span>
@@ -166,6 +265,15 @@
   </div>
 
   <div class="grid" id="roleGrid"></div>
+
+  <div class="section-divider"><span>Next: Choose Your Focus</span></div>
+
+  <div class="domains-hero">
+    <h2>Choose <u>three</u> problem domains for your team</h2>
+    <p>Focus on a real campus experience that you want to improve.</p>
+  </div>
+
+  <div class="domains-grid" id="domainsGrid"></div>
 
   <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
 </div>
@@ -220,6 +328,45 @@ grid.innerHTML = ROLES.map((r, i) => `
 requestAnimationFrame(() => {
   document.querySelectorAll('.rolecard').forEach(el => el.classList.add('animate-in'));
 });
+
+const DOMAINS = [
+  {
+    title: "Campus Life",
+    items: ["Canteen", "Parking", "Lift & Accessibility", "Campus Navigation"]
+  },
+  {
+    title: "Learning",
+    items: ["Classroom & Teaching", "Library", "WIFI and Internet", "Teacher Consultation System"]
+  },
+  {
+    title: "Student Support",
+    items: ["Student Services", "Resource Allocation", "Lost and Found Reporting", "Student Mental Health"]
+  }
+];
+
+const domainsGrid = document.getElementById('domainsGrid');
+domainsGrid.innerHTML = DOMAINS.map((d, i) => `
+  <div class="domain-col" style="animation-delay:${0.08 * i}s">
+    <div class="domain-title">${d.title}</div>
+    <div class="domain-rule"></div>
+    <ul class="domain-list">
+      ${d.items.map(item => `<li><span class="dot"></span><span>${item}</span></li>`).join('')}
+    </ul>
+  </div>
+`).join('');
+
+// Animate domains in when they scroll into view
+const domainObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('animate-in');
+      domainObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.domain-col').forEach(el => domainObserver.observe(el));
+
 </script>
 </body>
 </html>
