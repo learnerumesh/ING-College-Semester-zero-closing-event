@@ -44,23 +44,78 @@
     background:linear-gradient(90deg, transparent, var(--brass), transparent);
   }
 
-  .hero{text-align:center; margin-bottom:38px;}
-  .hero .kicker{
-    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  /* ---- Collapsible sections ---- */
+  .section{
+    margin-bottom:28px;
+  }
+  .section-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+    cursor:pointer;
+    padding:22px 26px;
+    background:var(--parchment);
+    border:1px solid rgba(201,162,75,0.35);
+    border-radius:16px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 12px 26px -16px rgba(26,23,18,0.22);
+    transition:box-shadow .2s ease;
+  }
+  .section-header:hover{
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 18px 34px -16px rgba(26,23,18,0.28);
+  }
+  .section-header-text{flex:1;}
+  .section-header .kicker{
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase;
     color:var(--brass-soft); background:var(--ink); display:inline-block;
-    padding:6px 14px; border-radius:20px; font-weight:700; margin-bottom:16px;
+    padding:5px 12px; border-radius:20px; font-weight:700; margin-bottom:12px;
   }
-  .hero h1{
+  .section-title{
     font-family:'Fraunces', serif; font-weight:600;
-    font-size:clamp(30px,6vw,46px); margin:0 0 10px; letter-spacing:-0.01em;
+    font-size:clamp(22px,4.5vw,30px); margin:0 0 6px; letter-spacing:-0.01em;
+    color:var(--ink);
   }
-  .hero p{
-    margin:0 auto; color:#5b5648; font-size:15.5px; line-height:1.6; max-width:520px;
+  .section-title u{
+    text-decoration-color:var(--brass);
+    text-decoration-thickness:3px;
+    text-underline-offset:4px;
   }
-  .hero-rule{
-    width:64px; height:3px; margin:20px auto 0;
-    background:linear-gradient(90deg, var(--brass), var(--cardinal));
-    border-radius:3px;
+  .section-sub{
+    margin:0; color:#5b5648; font-size:14.5px; line-height:1.55; max-width:520px;
+  }
+  .chevron-btn{
+    flex-shrink:0;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1.5px solid var(--brass);
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:transform .3s cubic-bezier(.22,1,.36,1), background .2s ease;
+    margin-top:2px;
+  }
+  .chevron-btn:hover{background:var(--stone);}
+  .section-header.collapsed .chevron-btn{transform:rotate(-90deg);}
+
+  .section-body{
+    display:grid;
+    grid-template-rows:1fr;
+    transition:grid-template-rows .4s cubic-bezier(.22,1,.36,1);
+  }
+  .section-body.collapsed{
+    grid-template-rows:0fr;
+  }
+  .section-body-inner{
+    overflow:hidden;
+    min-height:0;
+    padding-top:26px;
+  }
+  .section-body.collapsed .section-body-inner{
+    padding-top:0;
   }
 
   .grid{
@@ -153,32 +208,6 @@
   }
 
   /* ---- Problem domains section ---- */
-  .section-divider{
-    display:flex; align-items:center; gap:14px;
-    margin:56px 0 40px;
-  }
-  .section-divider::before, .section-divider::after{
-    content:""; flex:1; height:1px;
-    background:linear-gradient(90deg, transparent, var(--brass), transparent);
-  }
-  .section-divider span{
-    font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
-    color:var(--cardinal-deep); font-weight:700; white-space:nowrap;
-  }
-
-  .domains-hero{text-align:center; margin-bottom:34px;}
-  .domains-hero h2{
-    font-family:'Fraunces', serif; font-weight:600;
-    font-size:clamp(26px,5vw,36px); margin:0 0 10px; letter-spacing:-0.01em;
-  }
-  .domains-hero h2 u{
-    text-decoration-color:var(--brass);
-    text-decoration-thickness:3px;
-    text-underline-offset:4px;
-  }
-  .domains-hero p{
-    margin:0 auto; color:#5b5648; font-size:15px; line-height:1.6; max-width:480px;
-  }
 
   .domains-grid{
     display:grid;
@@ -257,23 +286,41 @@
 <div class="stage">
   <div class="brandbar">ING College of Innovation and Leadership · Semester Zero</div>
 
-  <div class="hero">
-    <span class="kicker">Team Formation</span>
-    <h1>Build a Team With Clear Roles</h1>
-    <p>Six roles, one mission. Every strong team splits the work this way — know your role, own it, and lean on your teammates for the rest.</p>
-    <div class="hero-rule"></div>
+  <div class="section" id="rolesSection">
+    <div class="section-header collapsed" data-target="rolesBody">
+      <div class="section-header-text">
+        <span class="kicker">Team Formation</span>
+        <h1 class="section-title">Build a Team With Clear Roles</h1>
+        <p class="section-sub">Six roles, one mission. Every strong team splits the work this way — know your role, own it, and lean on your teammates for the rest.</p>
+      </div>
+      <button class="chevron-btn" aria-label="Toggle team roles">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#7F141D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="section-body collapsed" id="rolesBody">
+      <div class="section-body-inner">
+        <div class="grid" id="roleGrid"></div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid" id="roleGrid"></div>
-
-  <div class="section-divider"><span>Next: Choose Your Focus</span></div>
-
-  <div class="domains-hero">
-    <h2>Choose <u>three</u> problem domains for your team</h2>
-    <p>Focus on a real campus experience that you want to improve.</p>
+  <div class="section" id="domainsSection">
+    <div class="section-header collapsed" data-target="domainsBody">
+      <div class="section-header-text">
+        <span class="kicker">Next: Choose Your Focus</span>
+        <h1 class="section-title">Choose <u>three</u> problem domains for your team</h1>
+        <p class="section-sub">Focus on a real campus experience that you want to improve.</p>
+      </div>
+      <button class="chevron-btn" aria-label="Toggle problem domains">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#7F141D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="section-body collapsed" id="domainsBody">
+      <div class="section-body-inner">
+        <div class="domains-grid" id="domainsGrid"></div>
+      </div>
+    </div>
   </div>
-
-  <div class="domains-grid" id="domainsGrid"></div>
 
   <footer>ING College of Innovation and Leadership · Semester Zero Closing Event</footer>
 </div>
@@ -367,6 +414,14 @@ const domainObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.domain-col').forEach(el => domainObserver.observe(el));
 
+document.querySelectorAll('.section-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const targetId = header.getAttribute('data-target');
+    const body = document.getElementById(targetId);
+    header.classList.toggle('collapsed');
+    body.classList.toggle('collapsed');
+  });
+});
 </script>
 </body>
 </html>
