@@ -255,6 +255,99 @@
     margin:6px 0 18px;
   }
 
+  /* ---------- Project & Supervisor briefing ---------- */
+  .briefing{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:8px 0 28px;
+    text-align:left;
+  }
+
+  .project-card{
+    background:linear-gradient(135deg, var(--ink), #2B2823);
+    border-radius:16px;
+    padding:22px 24px;
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(12px);
+  }
+  .project-card.animate-in{
+    animation:memberIn .55s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .project-card::before{
+    content:"";
+    position:absolute;
+    top:-30px; right:-30px;
+    width:120px; height:120px;
+    background:radial-gradient(circle, rgba(201,162,75,0.25), transparent 70%);
+  }
+  .project-label{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brass-soft);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .project-name{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(19px,4.5vw,24px);
+    color:#fff;
+    line-height:1.3;
+    margin:0;
+  }
+
+  .supervisor-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#fff;
+    border:1.5px solid var(--brass);
+    border-radius:16px;
+    padding:16px 20px;
+    opacity:0;
+    transform:translateY(12px);
+  }
+  .supervisor-card.animate-in{
+    animation:memberIn .55s cubic-bezier(.22,1,.36,1) forwards;
+    animation-delay:.1s;
+  }
+  .supervisor-avatar{
+    flex-shrink:0;
+    width:48px; height:48px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--cardinal), var(--cardinal-deep));
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:18px;
+  }
+  .supervisor-text{flex:1; min-width:0;}
+  .supervisor-label{
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--cardinal-deep);
+    font-weight:700;
+    margin-bottom:3px;
+  }
+  .supervisor-name{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    line-height:1.25;
+  }
+
   .roster-label{
     font-size:12px;
     letter-spacing:.14em;
@@ -398,6 +491,22 @@
       <div class="team-name" id="teamNameLabel"></div>
       <div class="location-chip" id="locationChip" style="display:none;"></div>
       <div class="team-rule" id="teamRule"></div>
+      <div class="briefing" id="briefing" style="display:none;">
+        <div class="project-card" id="projectCard" style="display:none;">
+          <div class="project-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.05V17h6v-.25c0-.85.4-1.55 1-2.05A7 7 0 0 0 12 2Z" stroke="#E4CC8B" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            Your Project
+          </div>
+          <p class="project-name" id="projectName"></p>
+        </div>
+        <div class="supervisor-card" id="supervisorCard" style="display:none;">
+          <div class="supervisor-avatar" id="supervisorAvatar"></div>
+          <div class="supervisor-text">
+            <div class="supervisor-label">Your Supervisor</div>
+            <div class="supervisor-name" id="supervisorName"></div>
+          </div>
+        </div>
+      </div>
       <div class="roster-label">Your teammates</div>
       <div class="roster" id="rosterGrid"></div>
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
@@ -476,9 +585,11 @@ function groupsFromRows(rows){
   if(!rows.length) return null;
   const header = rows[0].map(h => h.trim().toLowerCase());
   const groupIdx = header.findIndex(h => h.includes('group'));
-  const nameIdx = header.findIndex(h => h.includes('name'));
+  const nameIdx = header.findIndex(h => h.includes('name') && !h.includes('project') && !h.includes('supervisor'));
   const floorIdx = header.findIndex(h => h.includes('floor'));
   const roomIdx = header.findIndex(h => h.includes('room'));
+  const supervisorIdx = header.findIndex(h => h.includes('supervisor'));
+  const projectIdx = header.findIndex(h => h.includes('project'));
   if(groupIdx === -1 || nameIdx === -1) return null;
 
   const out = {};
@@ -499,6 +610,14 @@ function groupsFromRows(rows){
     if(roomIdx !== -1){
       const room = (r[roomIdx] || '').toString().trim();
       if(room) meta[g].room = room;
+    }
+    if(supervisorIdx !== -1){
+      const supervisor = (r[supervisorIdx] || '').toString().trim();
+      if(supervisor) meta[g].supervisor = supervisor;
+    }
+    if(projectIdx !== -1){
+      const project = (r[projectIdx] || '').toString().trim();
+      if(project) meta[g].project = project;
     }
   }
   GROUP_META = meta;
@@ -638,6 +757,42 @@ function showReveal(item){
   const ruleEl = document.getElementById('teamRule');
   teamNameEl.classList.remove('animate-in'); void teamNameEl.offsetWidth; teamNameEl.classList.add('animate-in');
   ruleEl.classList.remove('animate-in'); void ruleEl.offsetWidth; ruleEl.classList.add('animate-in');
+
+  const briefing = document.getElementById('briefing');
+  const projectCard = document.getElementById('projectCard');
+  const supervisorCard = document.getElementById('supervisorCard');
+  const hasProject = meta && meta.project;
+  const hasSupervisor = meta && meta.supervisor;
+
+  if(hasProject || hasSupervisor){
+    briefing.style.display = 'flex';
+
+    if(hasProject){
+      document.getElementById('projectName').textContent = meta.project;
+      projectCard.style.display = 'block';
+      projectCard.classList.remove('animate-in'); void projectCard.offsetWidth; projectCard.classList.add('animate-in');
+    } else {
+      projectCard.style.display = 'none';
+    }
+
+    if(hasSupervisor){
+      document.getElementById('supervisorName').textContent = meta.supervisor;
+      const initials = meta.supervisor
+        .replace(/^(dr|mr|mrs|ms|prof)\.?\s+/i, '')
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(w => w[0].toUpperCase())
+        .join('');
+      document.getElementById('supervisorAvatar').textContent = initials;
+      supervisorCard.style.display = 'flex';
+      supervisorCard.classList.remove('animate-in'); void supervisorCard.offsetWidth; supervisorCard.classList.add('animate-in');
+    } else {
+      supervisorCard.style.display = 'none';
+    }
+  } else {
+    briefing.style.display = 'none';
+  }
 
   const roster = document.getElementById('rosterGrid');
   const members = GROUPS[item.group];
