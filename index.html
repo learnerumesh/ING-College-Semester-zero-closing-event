@@ -254,6 +254,12 @@
     border-radius:30px;
     margin:6px 0 18px;
   }
+  .time-chip{
+    background:rgba(185,30,43,0.06);
+    border-color:var(--cardinal);
+    margin-top:-10px;
+  }
+  .time-chip svg{flex-shrink:0;}
 
   /* ---------- Project & Supervisor briefing ---------- */
   .briefing{
@@ -490,6 +496,7 @@
       <div class="roster-label" id="youAreIn">You are in</div>
       <div class="team-name" id="teamNameLabel"></div>
       <div class="location-chip" id="locationChip" style="display:none;"></div>
+      <div class="location-chip time-chip" id="timeChip" style="display:none;"></div>
       <div class="team-rule" id="teamRule"></div>
       <div class="briefing" id="briefing" style="display:none;">
         <div class="project-card" id="projectCard" style="display:none;">
@@ -588,6 +595,7 @@ function groupsFromRows(rows){
   const nameIdx = header.findIndex(h => h.includes('name') && !h.includes('project') && !h.includes('supervisor'));
   const floorIdx = header.findIndex(h => h.includes('floor'));
   const roomIdx = header.findIndex(h => h.includes('room'));
+  const timeIdx = header.findIndex(h => h.includes('time'));
   const supervisorIdx = header.findIndex(h => h.includes('supervisor'));
   const projectIdx = header.findIndex(h => h.includes('project'));
   if(groupIdx === -1 || nameIdx === -1) return null;
@@ -610,6 +618,10 @@ function groupsFromRows(rows){
     if(roomIdx !== -1){
       const room = (r[roomIdx] || '').toString().trim();
       if(room) meta[g].room = room;
+    }
+    if(timeIdx !== -1){
+      const time = (r[timeIdx] || '').toString().trim();
+      if(time) meta[g].time = time;
     }
     if(supervisorIdx !== -1){
       const supervisor = (r[supervisorIdx] || '').toString().trim();
@@ -751,6 +763,14 @@ function showReveal(item){
     locationChip.style.display = 'inline-flex';
   } else {
     locationChip.style.display = 'none';
+  }
+
+  const timeChip = document.getElementById('timeChip');
+  if(meta && meta.time){
+    timeChip.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#7F141D" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="#7F141D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${meta.time}</span>`;
+    timeChip.style.display = 'inline-flex';
+  } else {
+    timeChip.style.display = 'none';
   }
 
   const teamNameEl = document.getElementById('teamNameLabel');
