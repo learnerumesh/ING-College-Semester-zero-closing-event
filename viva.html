@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Innovation Week Pitch Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2f4f6;
+    --panel: #ffffff;
+    --ink: #14212b;
+    --muted: #5d6b77;
+    --line: #dde3e8;
+    --dolpo: #1d6b74;
+    --dolpo-soft: #e2f1f2;
+    --sandi: #a8541a;
+    --sandi-soft: #f9ece1;
+    --hit: #fff3b0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f171d; --panel: #17222a; --ink: #e8eef2; --muted: #93a2ae; --line: #26343e;
+      --dolpo: #5cc2cc; --dolpo-soft: #16323626; --sandi: #f0a069; --sandi-soft: #3a261826; --hit: #5a4d10;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f171d; --panel: #17222a; --ink: #e8eef2; --muted: #93a2ae; --line: #26343e;
+    --dolpo: #5cc2cc; --dolpo-soft: #16323626; --sandi: #f0a069; --sandi-soft: #3a261826; --hit: #5a4d10;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 16px/1.5 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 56px; }
+  h1 {
+    font: 800 clamp(2rem, 6vw, 3.25rem)/1.05 "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+    letter-spacing: -0.02em; margin: 0 0 10px;
+  }
+  .college { margin: 0 0 12px; font-weight: 600; color: var(--dolpo); }
+  .lede { color: var(--muted); margin: 0 0 24px; max-width: 60ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0 0 24px; padding: 0; list-style: none; font-weight: 500; }
+  .facts b { font-weight: 600; }
+  .finder {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 28px;
+  }
+  .finder label { font-weight: 600; }
+  .finder input {
+    width: 5.5rem; font: inherit; padding: 8px 10px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+  }
+  .finder input:focus-visible { outline: 3px solid var(--dolpo); outline-offset: 1px; }
+  #result { color: var(--muted); }
+  #result strong { color: var(--ink); }
+
+  .rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 720px) { .rooms { grid-template-columns: 1fr; } }
+  .room { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .room header { padding: 18px 20px 16px; border-top: 6px solid var(--c); background: var(--soft); }
+  .room.dolpo { --c: var(--dolpo); --soft: var(--dolpo-soft); }
+  .room.sandi { --c: var(--sandi); --soft: var(--sandi-soft); }
+  .room h2 { font: 800 1.6rem/1.1 "Bricolage Grotesque", "Instrument Sans", sans-serif; margin: 0; color: var(--c); }
+  .room header p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+  ol { list-style: none; margin: 0; padding: 0; }
+  li {
+    display: grid; grid-template-columns: 6.6rem 1fr auto; gap: 12px; align-items: baseline;
+    padding: 11px 20px; border-top: 1px solid var(--line);
+  }
+  li:first-child { border-top: 0; }
+  .time { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .time span { color: var(--muted); font-weight: 400; }
+  .name { font-weight: 500; }
+  .tag { font-size: .8rem; font-weight: 600; color: var(--c); }
+  li.hit { background: var(--hit); }
+  li.now { box-shadow: inset 5px 0 0 var(--c); background: var(--soft); }
+  .foot { margin-top: 28px; color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="college">ING College of Innovation and Leadership · Innovation Week</p>
+  <h1>Project pitch and viva schedule</h1>
+  <p class="lede">Each team pitches for 5 minutes so the panel can select one project from the three you submitted. Both rooms run at the same time. Find your group and reach your room a few minutes early.</p>
+
+  <ul class="facts">
+    <li><b>Date:</b> Tuesday, 22 September 2026</li>
+    <li><b>Starts:</b> 9:00 AM</li>
+    <li><b>Per team:</b> 5 minutes</li>
+    <li><b>Groups:</b> 23</li>
+  </ul>
+
+  <div class="finder">
+    <label for="q">Find your group</label>
+    <input id="q" type="number" min="1" max="23" inputmode="numeric" placeholder="1–23">
+    <span id="result" aria-live="polite"></span>
+  </div>
+
+  <div class="rooms">
+    <section class="room dolpo">
+      <header><h2>Dolpo</h2><p>4th floor · Groups 1–12 · 9:00–10:00 AM</p></header>
+      <ol id="dolpo"></ol>
+    </section>
+    <section class="room sandi">
+      <header><h2>Sandikharka</h2><p>5th floor · Groups 13–23 · 9:00–9:55 AM</p></header>
+      <ol id="sandi"></ol>
+    </section>
+  </div>
+
+  <p class="foot">Times are start times on 22 September. Please be ready before your slot; there is no gap between teams.</p>
+</div>
+
+<script>
+  var START = 9 * 60, SLOT = 5;
+  var rooms = [
+    { id: "dolpo", room: "Dolpo, 4th floor", groups: range(1, 12) },
+    { id: "sandi", room: "Sandikharka, 5th floor", groups: range(13, 23) }
+  ];
+  function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
+  function fmt(m) {
+    var h = Math.floor(m / 60), mm = m % 60, ap = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return h + ":" + (mm < 10 ? "0" : "") + mm + " " + ap;
+  }
+  var byGroup = {};
+  rooms.forEach(function (r) {
+    var ol = document.getElementById(r.id);
+    r.groups.forEach(function (g, i) {
+      var s = START + i * SLOT, e = s + SLOT;
+      byGroup[g] = { start: s, end: e, room: r.room };
+      var li = document.createElement("li");
+      li.id = "g" + g; li.dataset.start = s; li.dataset.end = e;
+      li.innerHTML = '<span class="time">' + fmt(s) + ' <span>– ' + fmt(e) + '</span></span>' +
+                     '<span class="name">Group ' + g + '</span><span class="tag"></span>';
+      ol.appendChild(li);
+    });
+  });
+
+  var q = document.getElementById("q"), out = document.getElementById("result");
+  q.addEventListener("input", function () {
+    document.querySelectorAll("li.hit").forEach(function (n) { n.classList.remove("hit"); });
+    var g = parseInt(q.value, 10), d = byGroup[g];
+    if (!q.value) { out.textContent = ""; return; }
+    if (!d) { out.textContent = "Enter a group number from 1 to 23."; return; }
+    var li = document.getElementById("g" + g);
+    li.classList.add("hit");
+    li.scrollIntoView({ block: "center", behavior: "smooth" });
+    out.innerHTML = "<strong>Group " + g + "</strong> pitches on 22 September at <strong>" + fmt(d.start) + "</strong> in " + d.room + ".";
+  });
+
+  function markNow() {
+    var n = new Date(), m = n.getHours() * 60 + n.getMinutes();
+    var isDay = n.getMonth() === 8 && n.getDate() === 22;
+    document.querySelectorAll("li").forEach(function (li) {
+      var on = isDay && m >= +li.dataset.start && m < +li.dataset.end;
+      li.classList.toggle("now", on);
+      li.querySelector(".tag").textContent = on ? "Now presenting" : "";
+    });
+  }
+  markNow(); setInterval(markNow, 30000);
+</script>
+</body>
+</html>
