@@ -19,19 +19,10 @@
     --sandi: #a8541a;
     --sandi-soft: #f9ece1;
     --hit: #fff3b0;
+    color-scheme: light;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f171d; --panel: #17222a; --ink: #e8eef2; --muted: #93a2ae; --line: #26343e;
-      --dolpo: #5cc2cc; --dolpo-soft: #16323626; --sandi: #f0a069; --sandi-soft: #3a261826; --hit: #5a4d10;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f171d; --panel: #17222a; --ink: #e8eef2; --muted: #93a2ae; --line: #26343e;
-    --dolpo: #5cc2cc; --dolpo-soft: #16323626; --sandi: #f0a069; --sandi-soft: #3a261826; --hit: #5a4d10;
   }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   * { box-sizing: border-box; }
@@ -87,7 +78,7 @@
 <body>
 <div class="wrap">
   <p class="college">ING College of Innovation and Leadership · Innovation Week</p>
-  <h1>Project pitch and viva schedule</h1>
+  <h1>Project pitch schedule</h1>
   <p class="lede">Each team pitches for 5 minutes so the panel can select one project from the three you submitted. Both rooms run at the same time. Find your group and reach your room a few minutes early.</p>
 
   <ul class="facts">
@@ -105,11 +96,11 @@
 
   <div class="rooms">
     <section class="room dolpo">
-      <header><h2>Dolpo</h2><p>4th floor · Groups 1–12 · 9:00–10:00 AM</p></header>
+      <header><h2>Dolpo</h2><p>4th floor · Odd groups (1, 3, 5 … 23) · 9:00–10:00 AM</p></header>
       <ol id="dolpo"></ol>
     </section>
     <section class="room sandi">
-      <header><h2>Sandikharka</h2><p>5th floor · Groups 13–23 · 9:00–9:55 AM</p></header>
+      <header><h2>Sandikharka</h2><p>5th floor · Even groups (2, 4, 6 … 22) · 9:00–9:55 AM</p></header>
       <ol id="sandi"></ol>
     </section>
   </div>
@@ -120,10 +111,11 @@
 <script>
   var START = 9 * 60, SLOT = 5;
   var rooms = [
-    { id: "dolpo", room: "Dolpo, 4th floor", groups: range(1, 12) },
-    { id: "sandi", room: "Sandikharka, 5th floor", groups: range(13, 23) }
+    { id: "dolpo", room: "Dolpo, 4th floor", groups: odd() },
+    { id: "sandi", room: "Sandikharka, 5th floor", groups: even() }
   ];
-  function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
+  function odd() { var r = []; for (var i = 1; i <= 23; i += 2) r.push(i); return r; }
+  function even() { var r = []; for (var i = 2; i <= 23; i += 2) r.push(i); return r; }
   function fmt(m) {
     var h = Math.floor(m / 60), mm = m % 60, ap = h >= 12 ? "PM" : "AM";
     h = h % 12 || 12;
